@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>منصة متمكن</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Readex+Pro:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   روابط المواد — ضع رابط OneDrive بين علامتي التنصيص لكل قسم
+   interactive = تدريبات وأنشطة تفاعلية
+   lessons     = حصص مسجلة و عروض تقديمية للدروس
+   remedial    = مصادر علاجية وإثرائية
+   materials   = مواد تعليمية مذكرات وأوراق عمل وتدريبات
+   assessments = نماذج هياكل دروس و اختبارات و تقييمات قصيرة و مراجعات
+   structure   = هيكل الاختبار
+   الرابط الفارغ "" يُظهر رسالة "سيتوفر قريباً"
+   ============================================================ */
+</style>
+<script>
+/* اسألي معلمتك — المعلمات حسب الصف والمادة: [الاسم, البريد] */
+const TEACHERS = {
+  "5": {"islamic": [["مريم الحاسني", "Maryam-R.Alshehhi@moe.sch.ae"]], "arabic": [["أسماء الكوك", "Asma.Alkouk@moe.sch.ae"], ["دعاء الحريري", "TID-Doaa.Alhariri@moe.sch.ae"]], "english": [["أمل جمال", "TID-Aml.Ibrahim@moe.sch.ae"]], "social": [["منى بسيس", "Muna.Alnuaimi@moe.sch.ae"]], "math": [["سناء سمير", "Sanaa.Freihat@moe.sch.ae"]], "science": [["سهى سليم", "TID-Suha.Alsmadi@moe.sch.ae"]]},
+  "6": {"islamic": [["عائشة التميمي", "TID-Aisha.Banshamlan@moe.sch.ae"]], "arabic": [["فاطمة ارشود", "Fatema.Ershood@moe.sch.ae"]], "english": [["فاطمة الشميلي", "Fatima.Alnazer@moe.sch.ae"]], "social": [["حليمة عكش", "Halima.Akash@moe.sch.ae"]], "math": [["أسماء عبدالله", "Asma-AM.Alshehhi@moe.sch.ae"]], "science": [["داليا بكري", "Dalia.Bakry@moe.sch.ae"]]},
+  "7": {"islamic": [["مريم الحاسني", "Maryam-R.Alshehhi@moe.sch.ae"]], "arabic": [["أسماء الكوك", "Asma.Alkouk@moe.sch.ae"]], "english": [["موزة الشحي", "Mouza.Zaid@moe.sch.ae"]], "social": [["فاطمة الشحي", "TID-Fatma.Obbood@moe.sch.ae"]], "math": [["تحرير صبحي", "Tahrir.Dahshan@moe.sch.ae"]], "science": [["داليا بكري", "Dalia.Bakry@moe.sch.ae"], ["أسرار الغانم", "Asrar.Alghaniem@moe.sch.ae"], ["هبة عزمي", "Heba.Shaath@moe.sch.ae"]]},
+  "8": {"islamic": [["خديجة الشحي", "Khadeeja-A.Alshehhi@moe.sch.ae"]], "arabic": [["دعاء الحريري", "TID-Doaa.Alhariri@moe.sch.ae"]], "english": [["فاطمة الشميلي", "Fatima.Alnazer@moe.sch.ae"], ["موزة الشميلي", "Moza.Shemaili@moe.sch.ae"]], "social": [["منى بسيس", "Muna.Alnuaimi@moe.sch.ae"]], "math": [["فاطمة حمادي", "Fatema.HAlshehhi@moe.sch.ae"], ["ذكريات عبدالحميد", "Zekryat.Alqaraleh@moe.sch.ae"]], "science": [["أسرار الغانم", "Asrar.Alghaniem@moe.sch.ae"]]},
+  "9": {"islamic": [["عائشة التميمي", "TID-Aisha.Banshamlan@moe.sch.ae"]], "arabic": [["منى الطريف", "Muna.Altareef@moe.sch.ae"], ["فاطمة ارشود", "Fatema.Ershood@moe.sch.ae"]], "english": [["Suprabha", "SUPRA.GOPINADHAN@moe.sch.ae"], ["موزة الشميلي", "Moza.Shemaili@moe.sch.ae"]], "social": [["حليمة عكش", "Halima.Akash@moe.sch.ae"]], "math": [["Minaxi", "Minaxi.Srivastava@moe.sch.ae"], ["عبير سليمان", "Abeer-S.Alshehhi@moe.sch.ae"]], "physics": [["Archana Nair", "Archana.Nair@moe.sch.ae"]], "science": [["نهى عمار", "Noha.Ammar@moe.sch.ae"]], "biology": [["ريما ناهض", "Reema.Alghefari@moe.sch.ae"]]},
+  "10": {"islamic": [["مريم الحاسني", "Maryam-R.Alshehhi@moe.sch.ae"], ["خديجة الشحي", "Khadeeja-A.Alshehhi@moe.sch.ae"]], "arabic": [["عائشة البحريني", "Aaesha.Altenaiji@moe.sch.ae"]], "english": [["رقية الحار", "Ruqayya.Alhar@moe.sch.ae"], ["Suprabha", "SUPRA.GOPINADHAN@moe.sch.ae"]], "social": [["فاطمة الشحي", "TID-Fatma.Obbood@moe.sch.ae"]], "math": [["اسراء أبو لبدة", "Israa.Abulebda@moe.sch.ae"], ["عائشة الشحي", "Aaesha.Shandood@moe.sch.ae"]], "physics": [["Archana Nair", "Archana.Nair@moe.sch.ae"]], "science": [["نهلة محمد", "Nahla.Rashed@moe.sch.ae"]], "chemistry": [["نهى عمار", "Noha.Ammar@moe.sch.ae"]]},
+  "11": {"islamic": [["عائشة التميمي", "TID-Aisha.Banshamlan@moe.sch.ae"]], "arabic": [["منى الطريف", "Muna.Altareef@moe.sch.ae"]], "english": [["رقية الحار", "Ruqayya.Alhar@moe.sch.ae"]], "social": [["فاطمة الشحي", "TID-Fatma.Obbood@moe.sch.ae"]], "math": [["اسراء أبو لبدة", "Israa.Abulebda@moe.sch.ae"], ["فاطمة حمادي", "Fatema.HAlshehhi@moe.sch.ae"]], "physics": [["Archana Nair", "Archana.Nair@moe.sch.ae"]], "chemistry": [["نهى عمار", "Noha.Ammar@moe.sch.ae"], ["هبة عزمي", "Heba.Shaath@moe.sch.ae"]], "biology": [["ريما ناهض", "Reema.Alghefari@moe.sch.ae"], ["شيماء الشحي", "Shayma.Malshehhi@moe.sch.ae"]]},
+  "12": {"islamic": [["خديجة الشحي", "Khadeeja-A.Alshehhi@moe.sch.ae"]], "arabic": [["منى التاجر", "Muna.Altajer@moe.sch.ae"]], "english": [["Rabia Malik", "Rabia.Malik@moe.sch.ae"]], "social": [["منى بسيس", "Muna.Alnuaimi@moe.sch.ae"]], "math": [["اسراء أبو لبدة", "Israa.Abulebda@moe.sch.ae"], ["شيخة الرحبي", "Shaikha-AS.Alshehhi@moe.sch.ae"]], "physics": [["Archana Nair", "Archana.Nair@moe.sch.ae"], ["نهلة محمد", "Nahla.Rashed@moe.sch.ae"]], "chemistry": [["هبة عزمي", "Heba.Shaath@moe.sch.ae"]], "biology": [["ريما ناهض", "Reema.Alghefari@moe.sch.ae"], ["شيماء الشحي", "Shayma.Malshehhi@moe.sch.ae"]]}
+};
+
+/* جدول الاختبارات — صورة جدول كل صف/مسار */
+const SCHEDULE = {
+  "grade-5":            "assets/schedules/grade-5-8.jpg",
+  "grade-6":            "assets/schedules/grade-5-8.jpg",
+  "grade-7":            "assets/schedules/grade-5-8.jpg",
+  "grade-8":            "assets/schedules/grade-5-8.jpg",
+  "grade-9-general":    "assets/schedules/grade-9-general.jpg",
+  "grade-9-advanced":   "assets/schedules/grade-9-advanced.jpg",
+  "grade-10-general":   "assets/schedules/grade-10-general.jpg",
+  "grade-10-advanced":  "assets/schedules/grade-10-advanced.jpg",
+  "grade-11-general":   "assets/schedules/grade-11-general.jpg",
+  "grade-11-advanced":  "assets/schedules/grade-11-advanced.jpg",
+  "grade-12-general":   "assets/schedules/grade-12-general.jpg",
+  "grade-12-advanced":  "assets/schedules/grade-12-advanced.jpg",
+  "grade-12-scientific":   "assets/schedules/grade-12-general.jpg"
+};
+const LINKS = {
+  "grade-5": {
+    islamic:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCyaU65hGNlRYEdqhmcX_tfARAHlDnQEBB5q3gHyUfoBGw?e=mxbCSY", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC1Q2JD-8KtSrS-hUQkleopAX0ut0whpw4yITBfZubLTpE?e=nYeeTM", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDls4HF0puKRpnNAu-tm5dnAfsAc41QFEhI6wY6vzAmxz0?e=I6XX7C", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDsO62AhUzQSrSN7NWlwaNrAfmTLhK6rb8fAD05-5Od-JM?e=t3dxCn", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAKNRij93eEQJ3ufEjf8Su5AYNi3u5eFrqRTv9-1QLU3wk?e=Hh3hen",
+               structure:["assets/structures/grade-5-islamic-1.jpg","assets/structures/grade-5-islamic-2.jpg","assets/structures/grade-5-islamic-3.jpg"] },
+    arabic:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAljTFweqXFQJWMmj3aH-UJAWoAwKJrkf9glEp-7T2GnSk?e=1y08Mg", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBVwduQcTlORYT5PRCs0oeAAWr9r71QkGruQ7WJHx4yC_4?e=wqcvua", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD-h1qZFInlSaI6UG6crU10AXIsAkvumRUEBITDWqTCJBc?e=cJWbkf", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBSTbqHbarkSb-yDO8FjkprAeFy66zf1a5sTut8DKq7eGo?e=vTf4iP", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCH3OQqkUerQpYRCKSF3CoSAWWSBhSNcaVCZxMd_KOhReg?e=0lmo9B", 
+               structure:["assets/structures/grade-5-arabic-1.jpg","assets/structures/grade-5-arabic-2.jpg","assets/structures/grade-5-arabic-3.jpg"] },
+    english:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDB_iuprEUFTppb3P_S9Lu3AXVgXebHpuH-XHvNYzL0qK4?e=W0TpI5", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAXx7XvRDs5TZwdg97ldO3bAe54N74D14YTDBiyHdQBU-c?e=a8rDRe", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD_ONos_CIhSpjAy8ZFxZ6_AaNfMvfFc90ywfOMD2CLs2s?e=mExuDm", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCXIgU0IOwIQLSBSK5yVfs6ARqn5OpgxYdBd_UJIVr4RRw?e=iro4w7", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAQQogVen0mTaYmdiuYXRsVAQRlg8WZvAAfjqgGgYqxLig?e=uTMdEn", 
+               structure:["assets/structures/grade-5-english-1.jpg","assets/structures/grade-5-english-2.jpg","assets/structures/grade-5-english-3.jpg"] },
+    social:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAbrzT7rML6TYa9VB3a3yeAAccZCPZF1fn4LQykho1W9OM?e=QmKztB", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBvAVCA6ik1QIq7svhP3jm5AXJRnJtcbcm_3q6WZDgiW8A?e=ywkjYa", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB1jeNSk0tASq7gLGe_K5lJAa7nA40o7Ld1CJ7J3fZr2lw?e=leNYW6", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDhouazx2JBS6RsdzV1FDLMAU3t4iAx9dSy4FcPnSSoHPI?e=sjlhMb", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAaZnHUF7HHQ5EcZsXc-BOaAaSDdn_Q6hnPW1Wi1T5G2Kc?e=x9C2BI", 
+               structure:["assets/structures/grade-5-social-1.jpg","assets/structures/grade-5-social-2.jpg"] },
+    math:      { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAtZOtDfcSLTKlAuf4RVoW4AUM08SlHnJdUs0TL9og6RRI?e=Dms5cz", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAHpdyf-_L1TYH4bMM8jBqzAd1SbXVYlMsBMHg7LIF4ovg?e=muuLy7", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBxPn5Dbvn4Qr1hMLH9OcOCAcTippZybffs5TSD23px4Jk?e=jjQg1Q", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCZlCvKyQ_DSojcLbvdMKnMAQxPmE9mkucL97OLa0UX2EM?e=BB9ckg", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBJSfAXYBnSTa-skxDeKKwaAckRSNDxyARshtKbmEThVIY?e=dn3YBp", 
+               structure:["assets/structures/grade-5-math-1.jpg","assets/structures/grade-5-math-2.jpg","assets/structures/grade-5-math-3.jpg"] },
+    science:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCOoViBrEBtQoXvhUZm4SB7AW9x57GDw0dlX1QEU_0cPJ8?e=9xKsNp", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA-AytqK7j5R4CnjXSbduejAQBkWVkIPnVRwo6En-JSQCI?e=HAVmg6", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBuM2XL2iilR7C2jVLEhGDbAQyvVGNt8KxhxKaJXEwKuWA?e=DX0CgT", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAq2UDr-U1hSJN2c-hFDqELAbuSlIVarFV26KxcuGG63OI?e=DJ5UU6", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgABT5wswwx1R6nhLrcVjKNyAUC7gPEdYu44GFg54v4Ka6A?e=KI9uPQ", 
+               structure:["assets/structures/grade-5-science-1.jpg","assets/structures/grade-5-science-2.jpg","assets/structures/grade-5-science-3.jpg","assets/structures/grade-5-science-4.jpg"] }
+  },
+  "grade-6": {
+    islamic:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDwn4tbEFldQpyuqjz9cA2aAe2ex_b9ek7Ua6Jbp5O0dcI?e=oTTznW", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBiCQmeTr_lSoM_6LYs4jU6AftWEquF4xaLICewqW-U4EM?e=OdscMQ", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDpTs_nG-ghQ60f9YUEiKWUAWU0yuuC6QHgnmIbHdDn92E?e=gSbaLH", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDRzIhG3t-JS4y0usrTPAK3AYzsMobFWJcIAwCjyPi1ksY?e=ycodYu", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDbh7g0VMiEQqQ3tRTwar9fAXZd7XWdPF258HS4Kn2N8Zg?e=bTAfqn", 
+               structure:["assets/structures/grade-6-islamic-1.jpg","assets/structures/grade-6-islamic-2.jpg","assets/structures/grade-6-islamic-3.jpg"] },
+    arabic:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAdDphBQb2-QZsuAMx9gctJAeNvRHnDw4PxEfRsZZO9Uv4?e=TIgYbr", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBz8hvdOT7cS6pqy91XWOMyAXfyAklRr3uMgJqxwBF8vhA?e=8RcBth", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBaQg4hUP5UTY3JHMRqlHbqAd1J1AxM-R_s5zHeRcfD2OE?e=Il9epR", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCtgBFD8oE_Spv8316cucZuATu9Y_-cw7Dj3Te73dBvyDE?e=bBeeZF", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCODhDBeqSZQ5AaRF5EsmvgAWNmAGMWf8oZpTRlDYUbLbQ?e=31u1LD", 
+               structure:["assets/structures/grade-6-arabic-1.jpg","assets/structures/grade-6-arabic-2.jpg","assets/structures/grade-6-arabic-3.jpg"] },
+    english:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgACQ1EEQ_zpS5Ro1sagl0hwAYZPHdvO9pI3-QMm4h-WNq4?e=vKQEXL", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgACsJhMCB69R4A-Fg49A8jwAfOOr0nlgZ-oUvr_0fgd6JQ?e=CUDhLb", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAm2bUQrTAKQKyEB60shGOvASBX8vXivB6FKBLRFwDAhR4?e=7mqkhW", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAx5fAb0wrCTImu9cqtiqryAVh_aq19dmUgDQEiKRmLScw?e=EVClUw", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDVUUBMBmeWRp9TRkfjH2_MAQpyiHpW1t272Gf38S4pm6A?e=RpFD7h", 
+               structure:["assets/structures/grade-6-english-1.jpg","assets/structures/grade-6-english-2.jpg","assets/structures/grade-6-english-3.jpg"] },
+    social:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBNcX4HuZ1tToZnh4_g-AHkAUNS1kFBicKzY0bBdkGRYoY?e=vdgCif", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBQZCCLCM3_TJiolD-3v_cwATP1s-WUpO9hTa10S6AeDKI?e=kOA1zO", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDOCqeuJPtjQJfU5kdiOfaoAWYOGzgiONOhGmxH7wU2ZI0?e=CiPr7W", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDrCHDGYp4-SLgAmWDdQW3aAfAGhVA8qOXweesXKlObMWg?e=HR0m6u", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAyYYtlG3plTaPgagFCXvj4AagZIsM_Yb_9oW2b1UWBJh8?e=P1QPhX", 
+               structure:["assets/structures/grade-6-social-1.jpg","assets/structures/grade-6-social-2.jpg"] },
+    math:      { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAYeLni7V4lS5NuUyQVp_IBAXFersOf0ufKSdvO3v2NThw?e=0g4Ahb", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCpAqG3YFLiQLktkgJNplXRAcFBmBXHhKvysdxI8KEzuQA?e=bLAUrj", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAXtfQ4tDo3QobIIUTCPLQDAbZdBgZs4-N-H810SGITnH4?e=t11GT8", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD809lXmwm-QoDSTy2urGaUAbbOMF2-JzV9VQ_LJngA0Wo?e=fB1cBw", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA6CJbXkSS2TKqMpi_2rSY7AdTNzVAO82X01K_IVZm06qA?e=7bmbby", 
+               structure:["assets/structures/grade-6-math-1.jpg","assets/structures/grade-6-math-2.jpg","assets/structures/grade-6-math-3.jpg"] },
+    science:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC512pfrvD8SKtwlyZ4hoclASHmXW027WBfDDg1H1qVLUI?e=fhHbW0", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAqK-JkkpkfSLNdLHS6lV7yAU7KECbHfb9vlgq80-8Ri-0?e=TXerY3", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD_FDk0ZMYyQpN2r4p5Z1ZZAZeWpDS_KPsNyk4_W2TgvLs?e=dBPG4V", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDyP44jm2EaSad7UM_urHgnAVgMEE1hvcS76ET4CQmRHIo?e=qK42Kw", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBqo0I6961yQZaLnoqWO5mzAYH0FwiH4RIGQQhnS0QN-tg?e=8nIqKb", 
+               structure:["assets/structures/grade-6-science-1.jpg","assets/structures/grade-6-science-2.jpg","assets/structures/grade-6-science-3.jpg","assets/structures/grade-6-science-4.jpg"] }
+  },
+  "grade-7": {
+    islamic:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBy8jhxgBEiRJhMV50h_8rHAadsRZCYzfCvsK6I6V59C7s?e=AfK9ej", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAeRPHOqMyPQKpnMxOFCBL3AaU6XItqs38qJkCmO5h0UIM?e=GK7YyG", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDHxYQRXs1FR6EcsQXOMLwrAcObcwIWdFhob42__qYLLHk?e=TLaEix", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB9bw6BAxtHSrVdpRtSvoOSAeHkUpRT2zarqxy0tZHSQ5Q?e=z5e9wf", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD1fsREZWEQTb8mWT0k5MySAQfNDtPsKmCGLNGeGsg0W-M?e=KNwWO6", 
+               structure:["assets/structures/grade-7-islamic-1.jpg","assets/structures/grade-7-islamic-2.jpg","assets/structures/grade-7-islamic-3.jpg"] },
+    arabic:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBYFMlx0UWnRpUdD8aVP187AVSRBBlTr1bwKmCtADx0Gxg?e=InjYLR", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAbYvipekRqTodUefzDzgC7AZVi7CIg1r21jl8mwMbWxxw?e=IWL5tp", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBmwBQIGq7NR5nnM8Kj07mxAfFrGRYc7bAs9MExGO4V_9o?e=ejHXXj", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDtO8d0pLJeQrpOCDXDgCBbAe2wr1HPoDDh0ChLxRHJ7iY?e=aIMOnv", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDCgArNK-j9SpyIJVoTkxUGAYFoaP1o6RgKCeDsXFiWLYw?e=8Dy6rs", 
+               structure:["assets/structures/grade-7-arabic-1.jpg","assets/structures/grade-7-arabic-2.jpg","assets/structures/grade-7-arabic-3.jpg"] },
+    english:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBsRl7gyjPNSJPPjWnxmFhLAdHZYjHxKM5yfKSRZpuK8W8?e=tWmxBo", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBzbZohWjm3Rb4U7G71MRP2AW3DQZwXxHHI_xW_T4JXOFk?e=PAHtQu", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDXX9JPRkgySJTbCii-QD-pAUo8T5oH8sEIyrLbjHGWhKQ?e=Gz4DXE", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAxCjbs1bsySIMFhvr5qcu_AaOt127SkuhVXtUL60-n7q0?e=EgrR8u", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAHbqWbrvvFS5OFTYO7jztwAfpqsjzyJXluBd0gZsmHdAU?e=0pYdil", 
+               structure:["assets/structures/grade-7-english-1.jpg","assets/structures/grade-7-english-2.jpg","assets/structures/grade-7-english-3.jpg"] },
+    social:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAv7BpTC1_NSKiSJX-U0B76AcLsjE8-cKrrWE8d6GMIaZw?e=jE5CNT", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC62_VHwPSbTLyzlrzV24hoAf_IinwQb_kDu_LXn1QBYlI?e=Zwjasz", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDeiNiJQ9rRRLHde-S_Q-EVAWe5Jp1347s0Azs3sKXi9Bs?e=5V1LGO", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCg98FtsF8ZQYNmK9RbNHGcAb1XzfVZD85EObL3oiy92BU?e=wextDI", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC4NrgD-kwyQ5HgpmuhXNOqAUlvEUobLPeSIbjaoEs3eOk?e=QMGFRS", 
+               structure:["assets/structures/grade-7-social-1.jpg","assets/structures/grade-7-social-2.jpg"] },
+    math:      { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCQo2bNDFwrSq90dM0Hhg2zAQu_2DNj00U516BxdrgzShI?e=z69WEK", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDr_ShMM2_ITL3AS-nmUotzAbheHJ2ozE0-jtz6wvkpXpM?e=x0JfRT", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCr4vZrj19gTr2Cx6IEwdUYAaqEA5mzzpbLS7BYGyJ3Z0s?e=IXQ0uw", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDknF9faKgyRKzQPyg7Ec3CATkZh0Ps4GdiOAZ1oLoUHN0?e=uqMbrj", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDcQd5WMh5lRZlMZKr20-l4AcunInNpdJwBJCTcLzwTRdI?e=FcPUry", 
+               structure:["assets/structures/grade-7-math-1.jpg","assets/structures/grade-7-math-2.jpg"] },
+    science:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAiPQLOfPXURrLhMN1ok7UQAbyNFSmv0h68u7ORes2BIjc?e=4hEK61", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBZaldKkGtqQqF3moETzbSkAWDDDpZVfGbPIt1d5BuUPzs?e=edqEe0", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgChU6G1n8JTTIw-DhpxYWmOAZgt3PyGOZ541HPw_K_Xo7g?e=ygP10p", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBtmDKYRTqTTr0Eh-3pdSzKAUYPPg3z-sk0CNwVLW9nJW0?e=V7sSVX", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCRFttLAQTCSYaj77SWsvxpAR-RBoF80y84abkC-hVYQzM?e=01H7Ja", 
+               structure:["assets/structures/grade-7-science-1.jpg","assets/structures/grade-7-science-2.jpg","assets/structures/grade-7-science-3.jpg","assets/structures/grade-7-science-4.jpg"] }
+  },
+  "grade-8": {
+    islamic:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBSBZsDqe4CRZsIK5UPpCRtAdZrBovrd455EDKyY7YSTrs?e=jWwkJU", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCpmq48PqF-So0SShnwilJ7AW784w4sA6m0KBjN2NL3laM?e=EWxG2R", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDs2o89g8HGRJPGNjpYRs8tAVJcpV5y0F1VdgY6GmNgEao?e=ggm1Hb", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBkMnJUzYBuQov-W5k2zwElASxqWS9ZrRerxlGLQ76rVr4?e=kjb1qt", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDqsZt92yRERrS6LySWjeeGAaaalLb3QJ-g-bEDkg3VcHY?e=lDdUXY", 
+               structure:["assets/structures/grade-8-islamic-1.jpg","assets/structures/grade-8-islamic-2.jpg","assets/structures/grade-8-islamic-3.jpg","assets/structures/grade-8-islamic-4.jpg"] },
+    arabic:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDVVAb_vuYjS4NqnWSEHpsTAb6d2sm-mmMw_XfMDKHlGCk?e=Ovpf3W", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBMX4y0qygXS5Sqflvend-EAezxItjqvrCIMULxk2oy0BM?e=xLtifS", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC0e7SoswnqTa1BC4-FpacwAQXdBm45Gqk1hKxf9USrWU0?e=DtHkCg", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDmBCU6eC8eSKwh-P3yVTwEAaZYYIGmSQMVq0hymyBsh6c?e=qcDAoi", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDfsgysOAMfSqZgX7UjWYhJAWARfbbqoKPuADEPbq3g-bw?e=ERUFvU", 
+               structure:["assets/structures/grade-8-arabic-1.jpg","assets/structures/grade-8-arabic-2.jpg","assets/structures/grade-8-arabic-3.jpg"] },
+    english:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB3_T--GQRCTI6rmDh0pkRbAdVef6GjLZ6gvU1HK57ICn8?e=ZFoSmE", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDBXzlAtpVIRJ4LhaDul6BBAcCfxwpGNOClEIhN_F7s5rA?e=8FUxYK", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDY9s7Ys_-IRopTZOKkZqEMAdJE8xuuURtx_KT4jeGFfps?e=B95mda", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBsJhGbU698Tqy3dG4qJOv_ARtT_GFdL02a6L-W3CYa610?e=cQqzaS", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAPfq8t9IpORLuhVNCVmKC2AVCZtGIKvM8ljTNk38YfU_Q?e=mMpt9g", 
+               structure:["assets/structures/grade-8-english-1.jpg","assets/structures/grade-8-english-2.jpg","assets/structures/grade-8-english-3.jpg"] },
+    social:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC82Jw62N-3TIFJL_kj80znAXXj9gr7VzvO2Z8mNAr-9jU?e=MyOfR1", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDNYrUE7qjiQrQUe1DMpKH6AamZUiNtyM-H1Nd4MzfnqdU?e=6IzpcI", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAjbxEbzGVNS5Ue8pnoTLDIAdWBOLhfsqfPwPrXNUDSRec?e=c8bTX1", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCCQEm6gO--RqYpKJRxdDFrAUGrt5W9ranJLxaeXnyGros?e=PBS6Nj", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBr3iDyZLj1S5O595lSRDe2ASUQkTUFNAa1hC-jiAn2rUY?e=7Kibap", 
+               structure:["assets/structures/grade-8-social-1.jpg","assets/structures/grade-8-social-2.jpg"] },
+    math:      { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD7HNQZBXXRSaiHQI5E7rXmAUoBpMUvT7bZ0P8r96ohoqU?e=D9FDpo", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAQX65IaLjyQp7SDkACnNJlAc0Lvos9ylNtecSHP9QUa0s?e=c79Yxu", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDiUo_wROXKRr2sL1DhYUhfAak9gD7V_eAU-e6_1tI1POk?e=bfb0xO", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAymt0d-4E9T7ooDfPmSARrAeLpe6uKZ7Di0z3EyLgP7M4?e=3OivjT", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDjZSBfvg3nQqy09iB0TdMIAXlDIe2zURjMGzmn7_pqo4o?e=nmb6kZ", 
+               structure:["assets/structures/grade-8-math-1.jpg","assets/structures/grade-8-math-2.jpg","assets/structures/grade-8-math-3.jpg"] },
+    science:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDLaEUHiyZ-SpNmAES6G6g_AfqXFPbWx16bJIv24RG82Dw?e=Khj6cj", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDS966EcTeuRbATmwe1ljc8ARFPx-aR-RpUawCf8m1YA0o?e=vBhHSd", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDr_mmrkVwuQpQT3tWYbcNGAeoChwyw-IB23p57229SXds?e=5yegoh", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA6x3rRVbCZT4L3N73N0A9xAdBr7ghEOhPSBvuOXS6WJ1c?e=kouiHh", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAudMb8t-ODRKGwF4vXur47Aa48IxqfrKJamCV8EmtIsIA?e=C6nmTR", 
+               structure:["assets/structures/grade-8-science-1.jpg","assets/structures/grade-8-science-2.jpg","assets/structures/grade-8-science-3.jpg","assets/structures/grade-8-science-4.jpg"] }
+  },
+  "grade-9-general": {
+    islamic:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC0K66H-955TLt-vqgRL-W8ARwmkWO-ChyxWa0DyS9dggY?e=nC0YCw", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD1n7-M-D1TTYtcbvSa0COWAUXsW9ia_1L_IXIZ_evrYTg?e=KPUFal", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCx_Ta30-_fTb4S9oD7iZDuAaKEIIejqDmEHGcd6PLE6lw?e=xiYQ8j", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDMeudFiM1QS49CociyxfKDAfd_ERvrMEmMen9e-ZL8x0I?e=c3OedI", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCjbsrtiyOiRq7xwc7fMKV3AXWbNuX3pvrcx3og0omRCSw?e=BH5vgo", 
+               structure:["assets/structures/grade-9-general-islamic-1.jpg","assets/structures/grade-9-general-islamic-2.jpg","assets/structures/grade-9-general-islamic-3.jpg"] },
+    arabic:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCtgEnO3Kv_Tbs9TvZTqDd6AXuvvYByOlRom4nSJL18ia0?e=syVwWN", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAILA4bh9J7Ra4tPtvOnGg2AcfSteQAmfCNX2UmJXLkAtQ?e=vyOjc3", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDa5WwbLzAAS4xg02bevsVdARuM3LcCopW41By6YfZih74?e=cEMkmO", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC0ao0sWf0pQJMx5QY8e91qAQWSI7KvG6f8HTADFgVQKKY?e=nKf3Bv", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAkZg7eVXHhTolTVBBq1si0ATclrcVuJJta87RIJEKWgqE?e=OD5Uf4", 
+               structure:["assets/structures/grade-9-general-arabic-1.jpg","assets/structures/grade-9-general-arabic-2.jpg","assets/structures/grade-9-general-arabic-3.jpg"] },
+    english:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDsFPZpucE8RIdXznoMO-3bAe2yQ6mtMWXAsZ9ZrwbAtfc?e=PJdWM5", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDT-Rt3RCQXQ4B3qks6ZTbAAapI9cLNhcwdbBhClsp8VTg?e=p5yMnp", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAsuZ3JQJbdTISAoIP83Yy0ATR2EdrOUrDqQtNRpDMEg04?e=YowiZC", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB9jK2fIqJ0QLzGCMSZJi9RATaxnYf8q9hqQPgifuglO-k?e=MYftJ9", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB1CGLNCkqFSqavEb5daeMJASPagP3vWHDVm4ObMcME4bk?e=ArGXto", 
+               structure:["assets/structures/grade-9-general-english-1.jpg","assets/structures/grade-9-general-english-2.jpg","assets/structures/grade-9-general-english-3.jpg"] },
+    social:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBi599kgrbYQrrlEK_bJEFqAQeIlBBYt_INZzJQvo7tJv8?e=Ik921K", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAbM9528dOvTIql4FwgRnNTAeW1xEUoZXa7AijcqL7NV0g?e=Tvq1nm", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD9BU9ji3plQYX7Oudws3FyAR1LSQvbwOGp9cMehkWis8w?e=VVg0ZD", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBxcMkPig8IRKYDNhZbOcE6AdCObfQTOpVMrvRsB33hgLQ?e=PhFpFm", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBstXeFxunhT7NJmV2frFxjATvAhvi2Wh0AM6NQvLj52MU?e=0eiOBi", 
+               structure:["assets/structures/grade-9-general-social-1.jpg","assets/structures/grade-9-general-social-2.jpg"] },
+    math:      { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCSM5j7c8DpTLthVj6YAZThAQfyE-uwvD8bgsyOISDuBw0?e=dWdQtP", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBjVKHbhaIfRrqwJUu38YjzAfKMuqatGk4Q0aGjIOI0z7g?e=e878a2", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDiwS1ic0ccRay-XnZ_FyrqAQGzVz7uqgeHLsXfX3QeIBk?e=nMNO1j", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBE_PsvjvYCSbyPCJSdQ9sNASzgX1LBe5omiv1O8Y44QIY?e=8IEhRd", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC_vZr9H-B7TqtaT1mJN3K9AUx-A-pLqXsmUiAzlIdbDOo?e=dnssoA", 
+               structure:["assets/structures/grade-9-general-math-1.jpg","assets/structures/grade-9-general-math-2.jpg"] },
+    science:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA_AzbDTX4LTZZFSitHdzm9AQ1E_yDn5n1JUyw6MorAvNs?e=qbrXRs", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAXrL2kxhYjQ4yejzTwumGkAUsmCAakQbpWEA3WXRPPP14?e=JZCpiI", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAykZjyVDLiQaktm__McbJcAQCnUolSLgY8-rBRSsrH6OQ?e=zbuwNj", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCsPHhrMC1vRrBfYbW6SuHsAQKeo2PbdDVxP8qs3C_2BCw?e=qWFDxQ", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC9-A-65p5TQJazreui2yDtAXRJaKbULzXSbvRtzD6Bs5E?e=NZiFeC", 
+               structure:["assets/structures/grade-9-general-science-1.jpg","assets/structures/grade-9-general-science-2.jpg","assets/structures/grade-9-general-science-3.jpg","assets/structures/grade-9-general-science-4.jpg"] }
+  },
+  "grade-9-advanced": {
+    islamic:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgADP6eFnr6SR6YUOMAXnyTmAXZMV_wVn7ALCTQrdLcPWw0?e=zTKrGN", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCzE6f1tpPzTqoOtLsTVhSUAWN-W36g6vEnd4EDtfkOGpk?e=sgwhTu", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAOQ51DTH2MRZJdhkCtUQf8AfbjZtXepRGGQhIm3j3eBVc?e=uoHbkK", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAZkbz9qF4NTZVOoQ6SbxSWAajLlzq4iNEc40BuYMZckGk?e=Vx3lAg", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDYOajZ18NmS75PwMAZ9BilAfiesHw8LKYwmNAqo0TWpQE?e=KeupnV", 
+               structure:["assets/structures/grade-9-advanced-islamic-1.jpg","assets/structures/grade-9-advanced-islamic-2.jpg","assets/structures/grade-9-advanced-islamic-3.jpg"] },
+    arabic:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD0VlQhPphJQZtPK6m_B4ZHAU3lfm-Yt7vsM72l-Hq3FsM?e=Xq1ban", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAluTTSrYOsTbi0yjyh9Zi7AcxKDY51xsuJhgThVlUsl10?e=venjk9", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDvXPJrrfs3RYBJ0mPO0WsxAXO6MduJW3-kcAc2EF2b_-M?e=gm4E2h", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA9bj8KDepvRKO1W6dtHVuWAVZ-86apF9d-c0M33pmEllI?e=HkgDqM", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDyDYMLY6pUQKYoFOh_WgAGAWKIPA7IhpWdDKjM8uLwH6E?e=EgSoMq", 
+               structure:["assets/structures/grade-9-advanced-arabic-1.jpg","assets/structures/grade-9-advanced-arabic-2.jpg","assets/structures/grade-9-advanced-arabic-3.jpg"] },
+    english:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCOkFRy4BP-S6V0O1gdo1nVAddupSXQ_gOPoj6MLpTBtCk?e=GpImnW", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBPjJoqM3iDQYIs96VmH1gLAc5U-nU_mZ2QOD09w-xxX4Q?e=tPLgsp", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgChbFzmTB9sSbCl1ivmrSUIAf32owFRjbovltjpDUJQ-2s?e=RcWxIA", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB6Drkf3FNjTK9xTtzZy2NdAYrn_Y20mNSTdQg5v5fk6Xs?e=BiK8vP", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCYDlBLJl53TbELcdxM09T-AU9mR8Z0SoSIdnJNO5dA4JA?e=0qRpMd", 
+               structure:["assets/structures/grade-9-advanced-english-1.jpg","assets/structures/grade-9-advanced-english-2.jpg","assets/structures/grade-9-advanced-english-3.jpg"] },
+    social:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCNdXV40WLpSrxd4PwQDP_qARmDIkyCdXxu0982XkmpcHA?e=zPT9BJ", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCuM1LViIPqR4-uu7-nyL_6AWsPHKOeOJGSCl2QKnnpQwk?e=e9BUGP", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAuy8pRH8jZTqaucEzBBOz_AbqFsounY_UHWy4ZXwFbKYo?e=QYaL4c", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCkJ-OiYF5iSbDyI1Mg6A-0AdG_CQm7wuQdJ35t8SLggK4?e=j5QIIl", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDVbqk4IjjjTrhcMPW8-j5SAdhe5nRgvuJvCJ5vnrzHdkE?e=maIwrm", 
+               structure:["assets/structures/grade-9-advanced-social-1.jpg","assets/structures/grade-9-advanced-social-2.jpg"] },
+    math:      { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB09YPLAZQvRLXSIZH-tD0_AW5CtsvHK7uoWg03pTcMdes?e=5payAa", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDbP8f2vUSPRYopkA0qGEb8AbUVgNcfJ-d0LeCdKAQeDx4?e=PpHnxc", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgADaLJAif43QYqEPG_gXClbAYgyKPGpH-NMJMlRRVpIvW4?e=duA3ea", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAGJgsSSTuhTJlSxiIyV8xlAWb-wL-I_8e1Pqf6j2LTNUQ?e=VZRRIg", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCGalqh02jTQrbRLzUFxO4JAe1P03MS6X8SAEtRlMQGwjQ?e=wtvd6v", 
+               structure:["assets/structures/grade-9-advanced-math-1.jpg","assets/structures/grade-9-advanced-math-2.jpg"] },
+    physics:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBTet18nPjCRqgr2gj0vkC8AX-4BtftYkuJsEUw2xtQOT4?e=2SKm8w", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDwlB4iBGoDQpYSXs2xmHfsAY_gzZ4QQ9jCeEk1Kp1u-VY?e=ZI9iYb", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDXMqPEUbOOQpo1lgEMRLTSAb6-_cRroEoIHkgcIW7PLlw?e=NvwZWU", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB4d9ZvJuXLTKWed0QgPnufAQqCfwDmT9xEMC38I8nsunM?e=EmFlEj", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCzTgZXMgTKT7JPSYiUgFEaAd8HP2JSRIleXMYd91jyotQ?e=yc4BIf", 
+               structure:["assets/structures/grade-9-advanced-physics-1.jpg"] },
+    biology:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC5LqxsZOVQQIwbhlYO-ZgKAZKv-ZSx1mlm3JMagcn4sGE?e=nUtYhu", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgARBtNcj_cZRrS3lOY34Y2wAQvf0fPPcntCDjEOk9yRMpY?e=jlCBE8", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBlkVYMgg59QKcZ5-ottG6EAX91ZPpfACEZP5x88935WlM?e=t9Bc5b", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAClngqg8V0TYfbN9pToh00AZ8uTa7KrMYCGBEaSN1imxQ?e=aRqJ3R", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgARRetiOkV2TrmcQ_VIqQYqAfeNQF1Ri9YXbCOEC2jh-mo?e=byXelW", 
+               structure:["assets/structures/grade-9-advanced-biology-1.jpg","assets/structures/grade-9-advanced-biology-2.jpg","assets/structures/grade-9-advanced-biology-3.jpg","assets/structures/grade-9-advanced-biology-4.jpg"] }
+  },
+  "grade-10-general": {
+    islamic:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDHK1jrGsTbQaRwyIpYHLJ7Ab5c-1orlsTF7ETOywLjrFY?e=e7CbuW", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDOJOd-LO9PSqw5ri5yOJCAAf5oSJQgLKK4-lOMYIdtdMM?e=ovqopR", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAjR09g9MjaQbIyx9bbCR_fAeTtxUq4IMROv-omq-xTlIE?e=5kUyyN", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDaBDvDm5mBRqhC89VsC454Ad5LU2LfCuc84Afz-OXd6FU?e=bBLoVb", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDWtIOcMHCqS5E22zCuOBoUAR0tFuuN4_jiGyIwuxnMaVM?e=sMn82P", 
+               structure:["assets/structures/grade-10-general-islamic-1.jpg","assets/structures/grade-10-general-islamic-2.jpg","assets/structures/grade-10-general-islamic-3.jpg"] },
+    arabic:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCerg1fx6pGT6dFVpkKZcG3AVK7ngjkLeUaxJIVos3alJ0?e=g2cKJP", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgClGKeSfhO1QKNz8b9PE1WdAc8rvvbsKZsYLf7ModiboiY?e=PCHmd4", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAWTKe0KjA_QqAd45tT2m5xAcd7hNRBiw36LIud9myyI8w?e=cd4jSI", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgABKGQoLtKoR7ktm_4FJbzcAeGZFGT26EqNiAC-zgGKF6w?e=QchMQK", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDILAMV2ycQS4PRgRlNq1KLAQz6HMZYEcjWpKoi_qTTiuI?e=al2VuV", 
+               structure:["assets/structures/grade-10-general-arabic-1.jpg","assets/structures/grade-10-general-arabic-2.jpg","assets/structures/grade-10-general-arabic-3.jpg"] },
+    english:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgATXhJBRnZyTaXjvucPK3JFAf2I_hnZaFREaTfHyq_UgdU?e=XxzhpP", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBH8HUP9d2rSpFUnk3NGxGhAWK9nQpH1njaXSsYG0OdxmQ?e=Y1C5ur", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDNqY6qvot9QLEtbhjA0JfLATpJBmLayJfktq0W9tH_Yig?e=haLvg5", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCa3dO1xbLXRqcP9DqXFP9oASy-b86UH0JaUyzo4MuC0hU?e=NlAHPF", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA1Kgx-i6qfTa-MMuKuDUoEAXzkhyQH5GVcMstKcYPnWKY?e=qYiLMA", 
+               structure:["assets/structures/grade-10-general-english-1.jpg","assets/structures/grade-10-general-english-2.jpg","assets/structures/grade-10-general-english-3.jpg"] },
+    social:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBjR0dtEFTORIEet9pj5M5uAfd7PD6Z8pZUGQCA7MFMvv8?e=Sn2DtW", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBEUKBMHKs7QoHh7YxCyQdBAd18Jvqr1du6458zv40oM7E?e=NDmxEx", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAyB1QIf7EgRK1BdQxljUP6Ab9w1FqX0KQbrh-vmM0-GQ4?e=4iHK3b", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDIO5gntt64T67QmStyz2lbAZ40Gq8CECTWKVFaKpbEqso?e=pr7JW5", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAj1bxydm9bTosc6hd5-AhJAQIUqV6_4eHqql4BnTq1Gl0?e=twrFvj", 
+               structure:["assets/structures/grade-10-general-social-1.jpg","assets/structures/grade-10-general-social-2.jpg"] },
+    math:      { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBnOPUDk_a7Qa0cAAnw-s1YAU3IxVsSkfkgCjXIpQjkjqk?e=EAFQgp", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBxbBeeQ-tGTpb9qBgTEOFEAVFk7IqKC67G6tid82jxZ5E?e=O0cam4", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBuxvv54a63QrgdMByuc6_zAdY55oKPvN7s85P-w-1cPXY?e=0S1Mq1", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgApgE9Ykzi_R4QERSESghhDAfKkM1m5MdOPAsTFeieauDo?e=nCHo4K", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB1yh2UQYFhT5bboHi_EVyfAeHhzValv5YG_rt2hgaRVV4?e=xekqeu", 
+               structure:["assets/structures/grade-10-general-math-1.jpg","assets/structures/grade-10-general-math-2.jpg","assets/structures/grade-10-general-math-3.jpg"] },
+    science:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB3JQwR1hZ5Sr6V1AQEhahIAaL6c6orzoavMnLw5n-6wKg?e=MmpyuF", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA1L1j7UYxFQpEoG_EmnQqiAaJPM7D8pVxA1C8ChkwgnSI?e=rxBnR3", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA9vbKKQCYgT7WbITZbOMnNAX0KW6WI9Bo_LoEIGCddovs?e=Nzb4ay", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBzKLyT89NDQJIpruFMNba9AbEYgYuIr5omyrhfFaMzX78?e=qrBRV4", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBXgmmh5z3aR6vgfyg5vXcPAYHGio3YiEfCxFD-A5XD8R8?e=SerFlF", 
+               structure:["assets/structures/grade-10-general-science-1.jpg","assets/structures/grade-10-general-science-2.jpg"] }
+  },
+  "grade-10-advanced": {
+    islamic:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDxnEEM5X6iToTzJOspZss8AWAS2zLAiM8Y6gUwhMR1OT0?e=9OBvZF", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBlr6blWyGxQLtOlGjRDD4zAcokiZc8uj4Dm4teS9-SFaw?e=vjUvhR", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBFnZbFyUj2QaJNAFfbP89gAc4CabSx9bB-Opg-OC5Va9A?e=PzdiYY", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAz8cRRVUSIT64kIMgbKzR_AdCHYnsYPZ-re3JlaG2rvJs?e=mA86cL", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCB9ksG-nJNRYDa4eD8ZiYqARsKEa0kY2BOF3vkNs61Hxc?e=0qrn4n", 
+               structure:["assets/structures/grade-10-advanced-islamic-1.jpg","assets/structures/grade-10-advanced-islamic-2.jpg","assets/structures/grade-10-advanced-islamic-3.jpg"] },
+    arabic:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAHKctMv-Y4T40ty6T3GgreAciiKVfddTQL0nsFSJAYCsc?e=vFXLlU", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBcjnlwfxjvSad3NBx8pbTBAVq8oRevP1vay0Fkxc53FNE?e=pGcWOk", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCalxMwL7-gSqDwB7XNO_s-AV_-tf4W8bpY4gw0QmX4yqc?e=e0BzeY", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA1dobDbXm1QrjBbm5JT2aTARtOItgNfNL9PmiL5VLtat0?e=Sd0LUp", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAAPz_-fabIRb-fBHhNubTVARn-F5Dxj8HcJi8B6d9BkVE?e=8heE9f", 
+               structure:["assets/structures/grade-10-advanced-arabic-1.jpg","assets/structures/grade-10-advanced-arabic-2.jpg","assets/structures/grade-10-advanced-arabic-3.jpg"] },
+    english:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBlthImrnVPTaVA9OthmBJxAfQ03hVCKpGX1I7ngt-oAS0?e=Chc4D6", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCxIHjt3EDXSbkahMTl-pMMARGO3zRGf6rNYoAgxR1GxCI?e=SlDiZC", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCaAeZlE78dSZresJtMhP2fAT1798auRrouKPPfRsUjlkE?e=9B6qVx", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCHgEj8jdE1Q6b2brHeW1QbAUJp-oOOaZqVYXPvwCtUdVQ?e=pNdJHV", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC4lVhgV_97TZyOLYl66gvUAV10ye4vt2DKj_sZK5P3Tis?e=9iiY3U", 
+               structure:["assets/structures/grade-10-advanced-english-1.jpg","assets/structures/grade-10-advanced-english-2.jpg","assets/structures/grade-10-advanced-english-3.jpg"] },
+    social:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAe3EZNqtcoSZA5hvkclTKdAQgcDHok9arsOlwXx59zN9k?e=dghsCP", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC6nriJ02vAQ6SA1ecFhjs3AY52sKNGPOZjRf601AY3Ee4?e=PiVnAC", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBYbiTw8oEPTqMqVTvA722RAZH_oezuyhDVdfAG-sIzMtA?e=ZOEqA9", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA_BLkRowJJT7ulVDJ1asbZAdwVEJm-OacGUB8SDdrUM4M?e=qz5Hn9", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC_bqfs1SlfRqFXOiq75UBnAdpUnTFmV9mk2a5pDGrv4pI?e=6c0KR1", 
+               structure:["assets/structures/grade-10-advanced-social-1.jpg","assets/structures/grade-10-advanced-social-2.jpg"] },
+    math:      { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAPI2i03E_TR5n9GG440yiOAVLoo38oC1qsvrOE4NtKFto?e=Pilh5c", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAWP9qQ-uuhTa78ykVBpSK1ASoiA3fa_gfYs4jT4LwjvpY?e=naQlQP", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBy5ig8_-yWR4V_fKlyM1BQAeH0QscPvAtSwH4yEbKYPDo?e=3wU5UY", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCwNY3jFL8CR7vLp3wquAsSAdGnSrTR_W15yzQfhJvSlSU?e=8rpoZN", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCv-7FErRthQpaBNUOQT0s4AQa80dWREJs3jhRpeN_ColU?e=untgfg", 
+               structure:["assets/structures/grade-10-advanced-math-1.jpg","assets/structures/grade-10-advanced-math-2.jpg"] },
+    physics:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD2Cs_yEEagTaV_c6bpbck7AY3OFgYewp21LD8unZtlglg?e=nW14yI", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCy87I3NrEnS7MWubxTTv4bARHtj2oxfVQZtqHfD8Y8Oh4?e=sNBQox", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA08WsAofGjS69gdd8duXhfASsanRlAkYUNhiVt17SDvIE?e=uRiFWe", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAIFlrG6c8PSZ2mDucl8uk9AZRWmZnnHeCTRI0GVNcZEb0?e=BfEwmX", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAz4PxTpVv8SIQaBMjoUt21ATvQni7GVQouyAszetBWOTM?e=4Uv5zg", 
+               structure:["assets/structures/grade-10-advanced-physics-1.jpg"] },
+    chemistry: { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBlBqQw9yhURIutGrL1ANdfAQVVETmp5PyMdClk0k6Aa5A?e=4tK3Tu", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAz6qgLe1zBRbsBxnqC9HnWAYtZZrFfIpkhfQSA_nID_wI?e=adFmAL", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAyVv6aWreoRpUdvZxIg1xfAUW4lXwKxe4BFpwcxr8NyQA?e=OkCaPp", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBsR2hX1ufBQ4I1tsEfc70xATDdghka87kMDxg2_yMjK_E?e=hU1y7x", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgANClThNEOGQoQMdvYTaFnqAYFFzaxJAvS2aeO8h2_GfP8?e=ekC654", 
+               structure:["assets/structures/grade-10-advanced-chemistry-1.jpg","assets/structures/grade-10-advanced-chemistry-2.jpg","assets/structures/grade-10-advanced-chemistry-3.jpg","assets/structures/grade-10-advanced-chemistry-4.jpg","assets/structures/grade-10-advanced-chemistry-5.jpg"] }
+  },
+  "grade-11-general": {
+    islamic:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDDOz0fBaAsTocAcaIEINawAVbiplfgRA9za6RCenFFgDQ?e=QBAnHG", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDJh5muo__dRKLwCSKqxcuUASPm166mtDQqUBC2bZ5R3H4?e=DWQLlS", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDq8_gj0O5PR4KvjTyIEUdVARh8hRkvZ-so6xdtst1g0Kc?e=09nXYg", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA6cOJ5Zxt7QIjn0sz2uXzIAR6jL6JnM2N_ahl3qnpFjcQ?e=EMm8o4", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAaXbUKBcjlSb2d-pbmuvD-ASnve2CS_RfXBBfJR9KyCG8?e=ffUXIS", 
+               structure:["assets/structures/grade-11-general-islamic-1.jpg","assets/structures/grade-11-general-islamic-2.jpg","assets/structures/grade-11-general-islamic-3.jpg","assets/structures/grade-11-general-islamic-4.jpg"] },
+    arabic:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDuT-wErlElRb4Y-1vJeUnEAV7nCYvsanlEbB5b5_5_Qrk?e=kDH3iw", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA-UHnzz0WpQabC8A45KlRMARly7beUv17dpjj2PPr1AVk?e=QmR4lV", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCC3F1DHswXSLBdm6ZtPNLZAfEQ_94B5KN_ieGoq2wM-Ok?e=YFX7ZM", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCJgF8JUlAzQbnVJYJpTDpzATLS_3DtJLNN_Smrs6lizmI?e=529LMJ", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCfLOFtXpYdT4MaLJ1VjtOvAb4Rrqj5T_LyxyJtERTDu9k?e=pLiStC", 
+               structure:["assets/structures/grade-11-general-arabic-1.jpg","assets/structures/grade-11-general-arabic-2.jpg","assets/structures/grade-11-general-arabic-3.jpg","assets/structures/grade-11-general-arabic-4.jpg","assets/structures/grade-11-general-arabic-5.jpg"] },
+    english:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB_VvBoRmIeTb0FoqwcT5aFARORzjJUUUHOwhoGcuErkBA?e=X9dTu1", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBBTViuN2NcSogoqBsiUq3kAecUCUp_VP10HrracWo6FTM?e=O3u7Yq", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB2op-vsMhwQqK2OizhKPQtAT24JePY98N5p6wzRb8dTrY?e=yV7Ins", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDf763UzWgDQ4PSF9QIeo5DAXKd4U8eY01HacC4-Sr8_sE?e=YqXNdg", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB4DfuzpZ_dTbYCaH3-QBk4AUJdBYKrOINjgvqUQxLU2TQ?e=r3Zeno", 
+               structure:["assets/structures/grade-11-general-english-1.jpg","assets/structures/grade-11-general-english-2.jpg","assets/structures/grade-11-general-english-3.jpg"] },
+    social:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCYhHUaU-RSS6eh2hP2XR-wASO7-S9OUuk0dDjRorpqG-g?e=qG03sS", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBlMZaIKfPvSasgBqjzaYrmAetaygUMTX3E4UpsdrBu_L8?e=OCS6Hi", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAuPLKUL7OQRbyKr98Ch-A9ATxqruX1PC2vfMoStZtJfVg?e=VziWdw", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC45EY3v6mcQYDw8KFhXWSiAaq14M_x-w3L-VqiXfGC6rQ?e=8zWSdH", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD3Cg6Ms8UeRpZhe4p0A5OiAfBpwmbHQtA_uDijEBl7oN8?e=dP76iv", 
+               structure:["assets/structures/grade-11-general-social-1.jpg","assets/structures/grade-11-general-social-2.jpg"] },
+    math:      { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDOi6h70WLHS7PLN877o72lAfOrHO2vKktEVL6h5RKKxW0?e=U22tuT", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAm6Mfp4TE7Qrqpgtet3b9qAWDusnFi0B6_BbxzuwWUJp4?e=H7jtnQ", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA2qHnTf0uDTqmzc-HdDhFBAbzMZ7mkecAfpZtogoL5bYQ?e=fxaigB", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDUr5GbSMIvRI5tpKivQjtAAaw_PpQ8XBOUsLyZ_Jj5gsM?e=7Paan9", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBNKBWpDPerT6SlElwIGyS3AUxY7ZpskZ-tyIOpgmuH02g?e=at1dZp", 
+               structure:["assets/structures/grade-11-general-math-1.jpg","assets/structures/grade-11-general-math-2.jpg"] },
+    chemistry: { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB9dEYU26dzRoOG1xhKIIDQAWvOc7-zeMblTxtGrG4u45M?e=dxyBPY", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD0tIMHCzztS6BrGw-NDr5_AdqXFROH6kPiXYapHh-Hqkg?e=Gsmnnu", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC2k-VFpF9aSaE-wzUUIYdDAW6D18wemq30JXoqQVvMaEM?e=trtEat", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD0eqhzB1I-TIoPryDB8nAcAUwd9LiJwfIeXgefr5g5YdA?e=OGMXr2", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCqxHywWXu5TbovOtTdWjLDAf6Zps5cxC93GWe_pnRMgUU?e=04miEY", 
+               structure:["assets/structures/grade-11-general-chemistry-1.jpg","assets/structures/grade-11-general-chemistry-2.jpg","assets/structures/grade-11-general-chemistry-3.jpg"] },
+    biology:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBVTTTzlUfRRqjjSydBvxsHAZVlVSJm7oRor0tBmnthzGQ?e=SCaHp1", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBKde3VJyVFQ7-1oajg8HbNAa3MS71iMkpHtyb6KhlDG1E?e=aam9wr", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDNMBNGk9LOTIMl0IMnIc4ZAcCMwFD1CrNo25ayubXbXCI?e=AWkCMn", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBi2Bn5XHMsT44BWlhE8AAwAdDnsPTUPyZMsKGO6kauO8Y?e=jr00R2", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBIxYg5gQ0yS5OiqhzIl8IrAUEVciZkTLf_mGm49oYU34M?e=cppC0t", 
+               structure:["assets/structures/grade-11-general-biology-1.jpg","assets/structures/grade-11-general-biology-2.jpg"] }
+  },
+  "grade-11-advanced": {
+    islamic:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDGrKrN-YfJTbwZAMlumbkIAQ3K9EsBnh5OopdNImGsZyI?e=iU8dD2", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAkNTkrBa9_TqZiedlu7koIAeuA2YLV79R7JoQ2XUKVrl4?e=gCsLBp", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCwsYf-eolMTZupWlIeBSd0AfIRM7uvlFbaj48gJECOOC0?e=tp9vDa", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCBzOU6vrdZQbAoMW08ZtS1AYAXGdNjseZHvX94SKOOtyo?e=acfB2U", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD4Of73peosS5AOLRe4eH1TAeC7b3ZSf7PZrLim0iVIVNg?e=pr4mbd", 
+               structure:["assets/structures/grade-11-advanced-islamic-1.jpg","assets/structures/grade-11-advanced-islamic-2.jpg","assets/structures/grade-11-advanced-islamic-3.jpg","assets/structures/grade-11-advanced-islamic-4.jpg"] },
+    arabic:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBwm273dpI7SpqseJkkAHi-AcExoYwD9kPAY1rXYCQt444?e=pZKBit", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDVJKtc1XaAQLYEd7BoKSRbAS-BOKjjtUZKH6nh0vQv5Vk?e=yXzBqL", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAS7kTuE1nIQoVJA_aCvNAWASZAIIve-ncheSIQi1g0-Rg?e=jy4WI7", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBmTEUJbk5vSoQQ2QLTzN3_AXPf29yiZ73NbQkalVG7sk8?e=lEJmC4", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCY_MHoK38CQrFxJ_IyBz6kAdTH7zwAmgRu9oGd5X0XsFk?e=ZFMxuo", 
+               structure:["assets/structures/grade-11-advanced-arabic-1.jpg","assets/structures/grade-11-advanced-arabic-2.jpg","assets/structures/grade-11-advanced-arabic-3.jpg","assets/structures/grade-11-advanced-arabic-4.jpg","assets/structures/grade-11-advanced-arabic-5.jpg"] },
+    english:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBaJLUjMZYBRqvzMO-vH9aAAdgsWExD-wzkktKjWgeCsic?e=bEqrtB", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCKT54ACBEIT42ULuUzm7_GARz4SJH50-FfAJGQh7JzgH8?e=JDWSVp", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAdVOkfsZkbRZAc22o3C7OFAXTpNSzwzu8NJdDXJby2kuY?e=VX5HTh", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAsoEDtGASkTaUC_Q91WNBoAQVCD3Zc50p4Fn3uUsrTLeA?e=L13ENb", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC7nxHWjSVNRqntVSW6i87MAWJR-JS2Lv4mBWteQtJqpYg?e=DxypYJ", 
+               structure:["assets/structures/grade-11-advanced-english-1.jpg","assets/structures/grade-11-advanced-english-2.jpg","assets/structures/grade-11-advanced-english-3.jpg"] },
+    social:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBcL-BTDx6ETLVT4D6Gh8ifAecad9P_LbunwIxc-nu_gpY?e=Ed8iUb", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDc3fdesBPRR6w4jsHsZYogAeV27EIua0IC2dG5wxZE0I8?e=SZQPtY", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCAmrQLI2oPR4yy99RZ5TPEAYno7Ri3NTKQ9j8F1Ra8rH8?e=a5irOx", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCLyrjKnWhbSZ8HSR6EE1RsAXkdSdTw9e11qPpxlkv8zJI?e=i4KMRb", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCf87yDm_DSQoTFcnVwOiB7AeVTMRDw32H_SjS7xp5S8KI?e=Gph6TA", 
+               structure:["assets/structures/grade-11-advanced-social-1.jpg","assets/structures/grade-11-advanced-social-2.jpg"] },
+    math:      { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCqpPFFhEM1Toc-pR4BiW0sAU8yGET-1XW4DiaS2igtJmA?e=xrgNb4", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDf6i1MsXn5QayIgSVptL9NAT1Q-nVV2moD-aCt7lYZnZY?e=7QXpeD", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDG3feCeeWYR4aNV5flU-DQAXwveYMX2k85l8J9-p02cfc?e=lvfeP8", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBiGiQ7ciL2Q6k7y9sQswVYAcBDA8oyrQZjRVhPegEZhgQ?e=PFJ4q4", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDGuxNsrP7tTLkuGS9TFd1lASEXQjeqTVT4cEFSlkhfuH4?e=ms9Fit", 
+               structure:["assets/structures/grade-11-advanced-math-1.jpg","assets/structures/grade-11-advanced-math-2.jpg"] },
+    physics:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA_XGqgQ2YiTa2W-z1DF-J_AT1vEkE4jnPk5y9v7aJkEtQ?e=8t2h3j", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDG3N-IiwW0RI4qHPs1x2KpAVvK5rjHv5B0yj5k1_Zj7Yg?e=7PJPMT", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA6pXRTQ2DLT5Kfeo-DVvdLAZ0-L-woAGWAYBC1UmXZ9rU?e=brnjBr", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA6pXRTQ2DLT5Kfeo-DVvdLAZ0-L-woAGWAYBC1UmXZ9rU?e=brnjBr", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBO5l-12GEIR5tXqSRaKs3aASP9dFfabWmmxz2LwRjvTIQ?e=BdoEyB", 
+               structure:["assets/structures/grade-11-advanced-physics-1.jpg"] },
+    chemistry: { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDrgThMgVTYTYPnYvaXLsOOASB5BGRhHgVScRu5SzJwIaM?e=jJYvGL", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgADsFdUhqIMRZrLQtm2aA68AVXQUYOx0MwClRANDX0BYJo?e=fJTW0h", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgByKZ3AkAbzTaKtLIlzsUPaASURVcHbDQbDHP0fjzIvJ6s?e=PeNFSe", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCbOaZRhE4OQZbOVYqXu9p5AUqhaLs78PT4XRIEDODEE4w?e=kkU9SU", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB2ELefrSFMTaqfcctjmZziAe_X6hvTyzeeAcX2CX7IZks?e=Tlid5f", 
+               structure:["assets/structures/grade-11-advanced-chemistry-1.jpg","assets/structures/grade-11-advanced-chemistry-2.jpg","assets/structures/grade-11-advanced-chemistry-3.jpg"] },
+    biology:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBsMKSHQbUlSZX0ZjXZGex0ARpaeWPDGuSBsxqBpCSs90I?e=jnDbXi", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDWXwX3Ymz0TIctTW3lhBhvAWpDikoqmwQi2oyZ8kC08_0?e=WEg168", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCVSTg_KHu-QoOuJVfelFLAAYb7X98AthToXHEu-8qtuT8?e=qPYZeB", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAiW0RwKHoETImiUElgs9BsAbTvRTUyyLUrrcyAxeKKUvg?e=JONWfh", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBVpoOdmWYgSpPnToL_Il4AAbl5Y2ashonA79lyGfNOF5I?e=Ps7971", 
+               structure:["assets/structures/grade-11-advanced-biology-1.jpg","assets/structures/grade-11-advanced-biology-2.jpg","assets/structures/grade-11-advanced-biology-3.jpg","assets/structures/grade-11-advanced-biology-4.jpg","assets/structures/grade-11-advanced-biology-5.jpg"] }
+  },
+  "grade-12-general": {
+    islamic:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCnIkTNuFqeSpowgua7lVIPAVBA-QKdPE5QaH95dQnXFm8?e=Nf7xJg", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAtHgmOAn2HTrc_RTP_eNqcAWarFu5yJua7EPFTPMf8JqQ?e=ONI6z0", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDBK7a5p5gfSIPHRdgkdtdpAVhvPyEAUy95o4ZxK3IXENE?e=k7cGb0", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCYyeVnzGbeSJ96pxhjSIafAUoBqTBwNfX1_7fxfveUlrI?e=vxjgPV", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCID7AIhdx6Tqt7EdtW4Y6cAboytND6OMu9u7FAEqGu01Q?e=u4Wdkr", 
+               structure:["assets/structures/grade-12-general-islamic-1.jpg","assets/structures/grade-12-general-islamic-2.jpg","assets/structures/grade-12-general-islamic-3.jpg"] },
+    arabic:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDQ3xeAXU2WTpYmvKPkZiQcAfPg--3SszHPe-wjOJMrez4?e=tCRpgF", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCoVeoS0REgTrEdahbPy8GAASJddIof6C8fmNW0E9j69lo?e=J55brQ", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCoqt9bp6YpSIeHaVbkqGGTASxqrto3q3RbIhctL2JO5zA?e=4rYSAf", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBIRuGaUNAvRoMBLjCUxJpRAUNvCYmbgmcNcT42-FsygKU?e=yCoJ8r", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB3XimrMEF7QKj-U2U0F35oARNWNFL--LA9kNyE3-VQsD4?e=gKzLVO", 
+               structure:["assets/structures/grade-12-general-arabic-1.jpg","assets/structures/grade-12-general-arabic-2.jpg","assets/structures/grade-12-general-arabic-3.jpg","assets/structures/grade-12-general-arabic-4.jpg"] },
+    english:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA9C6RVA1ReS4_zpvTyMMg0AblstBwiWq_Zb8lFYT28hTQ?e=uy8s4s", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBa11ZFcctoRL0mlcol38gHAY3kUTLi2zm3-caTx7QtYBo?e=wB56FY", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDnvIF8Z3GvSpAQeqAreI9xAaLI2Nw4BGhv48dd7EMvba4?e=hwKKae", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCDcqYIsLoXSYRd1kjvayb_AeOCj6H3rcrxOb28C-OYHNA?e=XU2sL9", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBiymWcNWSfTbnFyC_-_b9kAUeRhXfIlT-RHHwwnkaymFU?e=Z069Ls", 
+               structure:["assets/structures/grade-12-general-english-1.jpg","assets/structures/grade-12-general-english-2.jpg","assets/structures/grade-12-general-english-3.jpg"] },
+    social:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAnSlB4PrktTJgVCr22w87BAS-zB4_LiZ8xbARwmyS-sus?e=Cq0vxO", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB1-5jFZAYkSYM9tleN7k2TAWfH2KCn_gqt9KUN4yGbp6A?e=nLWf4q", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBmVsz9JzTIRIji6EcGmgU9AQS0s40Tji9iuNJqyy6eiXk?e=WLKNQT", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDCB8cykCHYSrRm3xhhWWXQAc19hdKzxIl8c2xFbWgmsXg?e=M3ytZf", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB52yaxPrE2Taec_-e72aN3ASz3PsBOsGfnD5fjVDdhkBs?e=o2hgGF", 
+               structure:["assets/structures/grade-12-general-social-1.jpg","assets/structures/grade-12-general-social-2.jpg"] },
+    math:      { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCoAz-m795eRZ0NrbDnHXlNAW8GH7PAOx7sTJxlMaoyrDg?e=audibu", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCbEp8QkFMiSY6CCCQYRunoASmJDu6XkuVVVqcdtZT9org?e=cn2udT", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCfIVAA8GZTTqVxOfHhpkO4AZzS0UoNhXmQNZbn-JVQrmg?e=HifArv", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBhZErQYKnbS73bMzPJvawLAfmddYd-NiV_NG16yS8P11k?e=txD4NY", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBkGsFCnt_nQIvmOXVfq9inAZ6d2_lh1MZrMRAPk58Qxz4?e=UrLLms", 
+               structure:["assets/structures/grade-12-general-math-1.jpg","assets/structures/grade-12-general-math-2.jpg","assets/structures/grade-12-general-math-3.jpg"] },
+    chemistry: { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAkXTC2FsO1TKMjh7l6HvjZAd7TyyLlldFkct50R0XXU_U?e=MZs3V2", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC1q2Du5FsrS4MiEct4qBb_Af3J92g3UsZbUT1pJwIQvHc?e=rCtfW9", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAaWLMc2Mk0ToXoIgcqthXPAaHIvC1FsB76bJ59qR65i4U?e=6G6maM", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAuX-KQNvOcTZt7ARD4MgY6AfC8QI6lteM33ATnhVLcDq0?e=GEOPZ7", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAviIRaMx6MSKuC0ff7YYvRAbmAnsh0OO5OBKMwVJGcVV0?e=snYvTo", 
+               structure:["assets/structures/grade-12-general-chemistry-1.jpg","assets/structures/grade-12-general-chemistry-2.jpg","assets/structures/grade-12-general-chemistry-3.jpg"] },
+    biology:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCJzHG26gKZRqjgfXwr2TokAYvmL37kPld1AC7sKUan_3I?e=UvYx9G", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAR5aVXtsfRRauNP8tBZvkBAZ6CRDVUPV65tlgw1sQ_2wE?e=kJiyJI", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDTVyIAc86JRJj8tKfhEt0FAZ6ZgAYBu7iRQ5a284Tr9qk?e=zULGaA", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgChA5JcIAj2SbdyCb4wNyW8AXsvjEigRwKLTgKQdrw3tp4?e=5CYQvb", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBF8VOtN0Y1Spxe3N4QEW3mAYe66xzj9CRTS-ibnzth58o?e=UF8Wsi", 
+               structure:["assets/structures/grade-12-general-biology-1.jpg","assets/structures/grade-12-general-biology-2.jpg"] }
+  },
+  "grade-12-advanced": {
+    islamic:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgACl264d0U4QavsPIifR55TAaFMNqwC6ecBTd737vsmweI?e=ddV0xO", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDehd6iK0BtQqRWSfLWZwxJASKt-Vank_aXU5o34jCd3Oc?e=LqubkC", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCopPbJPiHbQYFzU6SMwNT-AU9pfU0JbxPWHzv1uoWBdZM?e=U8KYja", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBNw1kFQkMoQKLcRVp43KguAY0XCVIefMn44cNTv-wh12g?e=DXbu88", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDWjARpoNUDSIjq27Hy6GDsAW_sXOENzvix_v2Wit9O2RM?e=9kfjAJ", 
+               structure:["assets/structures/grade-12-advanced-islamic-1.jpg","assets/structures/grade-12-advanced-islamic-2.jpg","assets/structures/grade-12-advanced-islamic-3.jpg"] },
+    arabic:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA1f6z_XJZsTZfKmWfaOiisAbdSpbwcBoKTlmhz7i5BCbk?e=81nM6n", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgASHzTWubROQ6a_VKwjYzHGAXrVeuhsgXHgFS742lhgAvg?e=4tGFns", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAFrLkAQc2bR6EWFyfyNfe-Af6sSQg4h-xmAiYYLVKO3GM?e=bXVXCU", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDxyMJZFRsEQ6eF46aXihrcAZJaWEQFkB5ATQX7JBVHqA4?e=h6CViX", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA7NvMyhonMTJjoC3nPLNhQAZ-acsRPEcGRDoMbpGAV7-4?e=tQy7fA", 
+               structure:["assets/structures/grade-12-advanced-arabic-1.jpg","assets/structures/grade-12-advanced-arabic-2.jpg","assets/structures/grade-12-advanced-arabic-3.jpg","assets/structures/grade-12-advanced-arabic-4.jpg"] },
+    english:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgB5sI1aaG1OTqIrbFCDQqRZAYMf_JpBPmYr2FAvXM5dDvk?e=vbB3Jt", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAjY-UQ-g3uTLPX6TK6glJsAW1b3WXtPSDqlGa_kg1eczQ?e=AX2tlh", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAnIvPyZAWlT7i--1SDAr9fAeTpBEBs4d34NGXWAZXJ52Y?e=FFIg8i", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBpwtf13w9ASYFKaaucINxqAW6MaPInranuDflEOW7LhVg?e=wahofK", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDCotldn77PTpwBCSyjPrgLAQToDw17VNBGbFZx4oKhc-E?e=JabA29", 
+               structure:["assets/structures/grade-12-advanced-english-1.jpg","assets/structures/grade-12-advanced-english-2.jpg","assets/structures/grade-12-advanced-english-3.jpg"] },
+    social:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC-YTTRjabnQb6NUyLslOv5AcRzm3FbraCwHx4CGyrBX2U?e=MFpL7W", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBm9FT9ZlHrSqJ6sLLInNjSARgSQlXWbq66L7Fjdkit-MI?e=t3BoTb", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAl8jyTNpE7SLXtxLUVvllEASCxYbW5KPhFvMlZGUZG3oM?e=LBLfA7", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCIcoI7lOMIR4p6MvhlSpyZAYQPtQjqtfRmMvH3J6LLHBA?e=XbN44C", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBLF68PstS1TYHTJJ8v1b2hAd4Y9lXafF0BE9DYdb_MZno?e=wGAk24", 
+               structure:["assets/structures/grade-12-advanced-social-1.jpg","assets/structures/grade-12-advanced-social-2.jpg"] },
+    math:      { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDBpb2UasI0TJOw_IAWAFfCAXNY2d-I4lgB-B6ZRaNTBuM?e=4pNzjx", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAqtjBjK2TcRJ-aEVJofnTmAVBkStdwQOpeWNfKEQgNdJk?e=6JPyeu", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDMZsxos8mxQqDv-e5rKHI_ATIXQWi6wOtrsMjWTVb58zY?e=Y0KpvZ", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCOmTovLV6bSqmp1oCgxVuvATlyqMcwa6lpYTTGEsyhlg4?e=skcehl", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDPu0QcU5HiRaeEOKflXEYuAXzAjjkB5OiQVq8dTe0x6wU?e=0wxI88", 
+               structure:["assets/structures/grade-12-advanced-math-1.jpg","assets/structures/grade-12-advanced-math-2.jpg","assets/structures/grade-12-advanced-math-3.jpg"] },
+    physics:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCtDiuza8q-Sq9W-FuLZZ8iAd9ZiLNhoik-KYTQmzh_OTU?e=F0S6cm", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBkp6CZYuPYRLhXiB-8buDhAe0PWfaDB7e99x4jTFgcVv8?e=9TNn5s", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBIBl9ZLNNfQpjzbK0docT_AV0daB0MIbZRO3umIy4iDDk?e=hZ1VkU", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBcqoXNsO_5RJO42OiQ2DX-ATc2D-7dwxBw4F23GyYQda0?e=tHKBsM", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDcEtzGRyvTQbiqBbT_x4dJAdbXaGnexPSIWUxnKZwPVPw?e=oCNRka", 
+               structure:["assets/structures/grade-12-advanced-physics-1.jpg"] },
+    biology:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDDvUe9nQX3R7U0TjBKzyYEAepLyqMnbSPLAWK2Eyght_s?e=JzfMV6", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC2UWqDYRVWQq2scGjoDaGrAaAayQls52P9jfjsDbLaS04?e=DJPwha", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDRism0gNdEQLGOEw-ImW3MAWOJM4e2ZkZ_WdD6NHlS5Ag?e=kN8ql8", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCJAvOtpL-tQ40v4hBPX34vARzwzfRB2sYv86gP-aOtDJw?e=2FODah", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBawy3HNB3BRJlyr_OtJ_GGAQklM96xPMSie5yZpfblf0Y?e=z9di3J", 
+               structure:["assets/structures/grade-12-advanced-biology-1.jpg","assets/structures/grade-12-advanced-biology-2.jpg","assets/structures/grade-12-advanced-biology-3.jpg","assets/structures/grade-12-advanced-biology-4.jpg","assets/structures/grade-12-advanced-biology-5.jpg"] }
+  },
+  "grade-12-scientific": {
+    islamic:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCq7pXnVf_kSrdy1E2cb3QNAb0fKepfak1y-pDvCnImSao?e=WL8TJd", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBP82v4aQ9PTJ16nD-hp2BoAW_3NfqIcD98rV7zj8KyWnE?e=3dumDI", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDGP8nWF9hKQoHqGkhkW-XvAdGFHJszZqV9vxs9xlwNNGo?e=Y5p4hx", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA6LGE2KP8zS4nbvcNqMmJxATquQaanngP1GIJvubJOg6M?e=fbruDd", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDFSnpXdmSmSqv7HQkRK7UmAcxQJpgAQsqewtMDc4pZUck?e=iUv2fO", 
+               structure:["assets/structures/grade-12-scientific-islamic-1.jpg","assets/structures/grade-12-scientific-islamic-2.jpg","assets/structures/grade-12-scientific-islamic-3.jpg"] },
+    arabic:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDABmsvLOsLSJ8qTKfaeW0tAZLXPKHrjiKorFA_lK2y4_M?e=3AkWe0", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD3SxXSbdqaQpsRzWKg8354AZYeJRKIT-yhYtHNsJwxGck?e=pb05y1", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCdMv2zTCXKS6oGxnAKjjZDATx-NaeG08P2-fG4RAa6tAc?e=72oi3i", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgD5zFq9IE1lRaQ3Nnij7gAzARxRbx4Po5_c4ZcefCT6-Aw?e=UyDc3R", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDARlkdXlTlTK1yrQmOTbvLAb5OnMD3tVBWcqbYPXvbfJs?e=g6ZKZL", 
+               structure:["assets/structures/grade-12-scientific-arabic-1.jpg","assets/structures/grade-12-scientific-arabic-2.jpg","assets/structures/grade-12-scientific-arabic-3.jpg","assets/structures/grade-12-scientific-arabic-4.jpg"] },
+    english:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDrTf-HuKD4RYue2j0hgfXSAeVMOE3fE5WReXizC8XIifI?e=Mrct0G", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBGGsPQOGwMTp-pSuCPug_kAcE8vUm1zYD6DgzviWRMzlw?e=QMOwlk", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCUGyCuW3ZvRbZWRW-awu46AQCMQtnuGjUEmQCm_IwJoXc?e=oksFwO", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBCjxjSObuDQJX0ISLMcHCmAauIyu3BSQYQCevtioqY84k?e=s6Zd7N", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgC3kv1qVtp7S5_EBSKn3Ei_AejDkxjHUUsMYhh140PNrGE?e=aV3GOT", 
+               structure:["assets/structures/grade-12-scientific-english-1.jpg","assets/structures/grade-12-scientific-english-2.jpg","assets/structures/grade-12-scientific-english-3.jpg"] },
+    social:    { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgA0s9Du7gY3QKHRdpE2ZDHgAfPiYuVjXmt7DxLVQB6qs3A?e=9vDVH3", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgABbd3pKgxeRob6rKooEAOJAZEfeZXtMm1YUt7BcnQUfdo?e=PSk6Ti", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBnPTTBncyrR7HFikIHXx6zAQiqRNJDAn0vFNhmT8qb39s?e=H2vCRx", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDrDSwgTZ07S7Hawps4aIPJASu4pBJgDdJMOM3LvdNbklo?e=u3CU0A", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBQpXJsri5jSJIA7fXja_egARkVX8jhAXgqwJP7b6k0AvM?e=Cm8Ce9", 
+               structure:["assets/structures/grade-12-scientific-social-1.jpg","assets/structures/grade-12-scientific-social-2.jpg"] },
+    math:      { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDg-U6x2JYKTqKqBn7e1JnuAZ37a4j7U60yl9c8xPMIFZQ?e=dT4FpC", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgClkJvrM29bRKVFU1S6d8lIAWjoFA01g4W4kUyvG-Lrwus?e=g3b2Kt", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBTggkGBkrYRKyN5AhLHhhCAfWAryH8qXU6bJsKihHsIcI?e=1crzLr", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDbvppnkuGfR5PFqkWIfwZ6AQc98I2kK6CUU_xuauJw5HA?e=5BHkGG", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBVj6yPZG7wRKNJxcCJpubZAbKsbdZ9zJ8yRYeMxw9wTbQ?e=0MuuXZ", 
+               structure:["assets/structures/grade-12-scientific-math-1.jpg","assets/structures/grade-12-scientific-math-2.jpg","assets/structures/grade-12-scientific-math-3.jpg"] },
+    physics:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCTW2n8XdRiRKLEm1lloo8sAY2GQk0BsWueUe2t0N0f0v8?e=EwEVbk", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgABDQzx-OKzQICdge_ssmDwAQAgQwuJkg4VE4nNMpaFF_M?e=5cMIQG", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAqVqd8IB4BTLDnvEBUrSzzAXlJOKEXGwYhl20URBBDta4?e=1TaMlT", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgBB_XxZfEgITYv92ga44kgTATC82_PCGhFK2ys9N77ItUQ?e=PbjVpU", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCotv_oWODdTZ0nXy_KIjdiARwAvvSMzOhgbgmvGdEYvp8?e=kPc1Ja", 
+               structure:["assets/structures/grade-12-scientific-physics-1.jpg","assets/structures/grade-12-scientific-physics-2.jpg","assets/structures/grade-12-scientific-physics-3.jpg"] },
+    biology:   { interactive:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAs8DfYwN6xSJPbDCd2nCfKAUF8J-EmTe3tbAHcUzKp67k?e=HscYOr", lessons:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDZowVtdboaRIiFDcdARRTIAS_JYBg3fupIi8-CRIZ87NY?e=TJ27pn", remedial:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgCpHSHexPHaR7USpWNTPAanAfT892VLh4QSMUbKZymH2_o?e=egKmFc", materials:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgDGd6Zx4fZAQJ_3UX51bE8zAdOBvruFenIhyDPKwwXDN10?e=cp1e9X", assessments:"https://emiratesschoolsese.sharepoint.com/:f:/s/ALROYASCHOOL20262027/IgAU5uyNWonfT5ktpfnB0rg4AVPYf6EGKYwB1DBW5xBVFlM?e=gSV9YU", 
+               structure:["assets/structures/grade-12-scientific-biology-1.jpg","assets/structures/grade-12-scientific-biology-2.jpg"] }
+  }
+};
+</script>
+<style>
+:root{
+  --teal:#17a99a; --teal2:#0f8f83; --tealSoft:#d9f1ec; --tealPale:#c9ebe4;
+  --ink:#2d2e3a; --muted:#8c8d99; --line:#eeeae4; --paper:#ffffff; --cream:#fbf9f6;
+  --peach:#fbe3d8; --mintbg:#e5f4f0;
+  --navy:#2d2e3a; --navy2:#1f2030; --gold:#17a99a; --ivory:#f7f5f1; --text:#2d2e3a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{font-family:"Readex Pro","Tajawal",system-ui,sans-serif;color:var(--ink);background:var(--mintbg);-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+body::before{content:"";position:fixed;width:520px;height:520px;border-radius:50%;background:var(--peach);top:-260px;left:-200px;z-index:0}
+body::after{content:"";position:fixed;width:900px;height:700px;border-radius:50%;background:#d6efe9;top:-420px;right:-260px;z-index:0}
+
+/* ===== الهيكل ===== */
+.shell{position:relative;z-index:1;max-width:1260px;margin:40px auto;background:var(--paper);border-radius:36px;
+  box-shadow:0 30px 80px -40px rgba(30,80,70,.35);display:grid;grid-template-columns:132px minmax(0,1fr) 310px;overflow:hidden;min-height:calc(100vh - 80px)}
+.side{display:flex;flex-direction:column;align-items:center;padding:30px 0 26px;gap:8px;background:#fff;border-inline-end:1px solid #f3f0eb}
+.brand{display:flex;flex-direction:column;align-items:center;text-decoration:none;margin-bottom:26px;padding:4px 0}
+.brand .cap{width:34px;height:auto}
+.brand .pre{font-family:"Aref Ruqaa",serif;font-weight:700;font-size:22px;line-height:1.5;color:#17a99a;margin:6px 0 14px}
+.brand .word{font-family:"Aref Ruqaa",serif;font-weight:700;font-size:44px;line-height:1.3;color:#1d2e48;margin-top:0}
+.brand .swash{width:70px;height:auto;margin-top:-8px}
+.brand .en{font-size:8.5px;letter-spacing:2.5px;color:#8c8d99;margin-top:5px;padding-left:2.5px}
+.nav{display:flex;flex-direction:column;gap:6px;width:100%;flex:1}
+.nav a{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 4px;color:var(--muted);text-decoration:none;font-size:13.5px;transition:color .2s}
+.nav a svg{width:22px;height:22px}
+.nav a:hover{color:var(--ink)}
+.nav a.on{color:var(--ink);font-weight:500}
+.nav a.on::after{content:"";position:absolute;inset-inline-end:0;top:14px;bottom:14px;width:3px;border-radius:3px;background:var(--teal)}
+.help{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--tealSoft);color:var(--teal);text-decoration:none}
+.help svg{width:20px;height:20px}
+
+.panel{background:var(--cream);padding:40px 38px 30px;min-width:0}
+.hello-logo{display:none}
+.hello{text-align:center}
+.logo-h{display:flex;flex-direction:column;align-items:center;cursor:pointer;margin:0 auto}
+.logo-h .cap{width:58px;height:auto}
+.logo-h .word{font-family:"Aref Ruqaa",serif;font-weight:700;font-size:clamp(64px,7vw,92px);line-height:1.1;color:#1d2e48}
+.logo-h .swash{width:150px;height:auto;margin-top:-10px}
+.logo-h .en{font-family:"Readex Pro",sans-serif;font-size:13px;font-weight:400;letter-spacing:6px;color:#8c8d99;margin-top:8px;padding-left:6px}
+.hello h1{font-size:clamp(28px,3.6vw,38px);font-weight:600;color:var(--ink);line-height:1.3;cursor:pointer}
+.hello .tag{color:var(--muted);font-size:17px;margin-top:6px;font-weight:300;line-height:1.7}
+.search{position:relative;display:block;margin:22px 0 30px}
+.search input{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#fff;border:1px solid #f0ece6;border-radius:14px;padding:13px 46px 13px 16px;outline:none;transition:.2s}
+.search input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(23,169,154,.12)}
+.search svg{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+.no-res{text-align:center;color:var(--muted);padding:30px 0}
+
+.aside{padding:34px 26px;background:#fff;border-inline-start:1px solid #f3f0eb}
+.profile{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding-bottom:6px}
+.profile img{width:190px;max-width:100%;height:auto;border-radius:22px;border:1px solid var(--line);background:#fff;padding:6px;box-shadow:0 14px 30px -20px rgba(29,46,72,.5)}
+.profile b{display:block;font-weight:600;font-size:18px}
+.profile > div{width:100%}
+.profile span{display:block;color:var(--muted);font-size:13.5px;line-height:1.6}
+.prog{margin-top:8px;height:4px;border-radius:4px;background:#eef0f0;overflow:hidden}
+.prog i{display:block;height:100%;width:72%;background:var(--teal);border-radius:4px}
+.prog-l{font-size:11px;color:var(--muted);margin-top:4px}
+.aside h2{color:var(--teal);font-weight:500;font-size:26px;margin-top:34px}
+.aside .sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+.toc{list-style:none;display:grid;gap:22px}
+.toc li{display:flex;align-items:center;gap:14px}
+.toc .n{font-size:40px;font-weight:600;color:var(--tealPale);line-height:1;min-width:52px;font-family:"Readex Pro",sans-serif}
+.toc b{display:block;font-weight:500;font-size:15px}
+.toc span{display:block;color:var(--muted);font-size:12.5px}
+.aside .ask-mini{display:flex;align-items:center;gap:10px;margin-top:30px;padding:14px 16px;border-radius:16px;background:var(--tealSoft);color:var(--teal2);text-decoration:none;font-weight:500;font-size:15px}
+.aside .ask-mini svg{width:22px;height:22px}
+
+/* ===== شريط التنقل ===== */
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 22px}
+.crumbs{font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.crumbs a{color:var(--muted)!important}
+.crumbs b{color:var(--ink);font-weight:500}
+.crumbs .sep{color:var(--teal)}
+.back{font-family:inherit;font-size:14px;color:var(--ink);background:#fff;cursor:pointer;border:1px solid var(--line);border-radius:999px;padding:8px 16px;display:inline-flex;gap:8px;align-items:center;transition:.2s}
+.back:hover{border-color:var(--teal);color:var(--teal)}
+.back svg{width:16px;height:16px}
+.section-title{font-size:clamp(21px,2.6vw,26px);font-weight:600;color:var(--ink);text-align:right;margin-bottom:4px}
+.section-sub{text-align:right;color:var(--muted);margin-bottom:22px;font-size:14.5px;font-weight:300}
+
+/* ===== البطاقات الملونة ===== */
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.card{--bg:#dff3ee;--ac:#17a99a;position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:6px;
+  min-height:150px;padding:24px 24px 22px;border-radius:22px;background:var(--bg);text-decoration:none;color:var(--ink);overflow:hidden;cursor:pointer;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s;opacity:0;animation:rise .5s forwards}
+.card:hover,.card:focus-visible{transform:translateY(-4px);box-shadow:0 18px 34px -20px color-mix(in srgb,var(--ac) 70%,transparent);outline:none}
+.grid .card:nth-child(6n+1){--bg:#dff3ee;--ac:#17a99a}
+.grid .card:nth-child(6n+2){--bg:#fde6dc;--ac:#ee7a52}
+.grid .card:nth-child(6n+3){--bg:#f6e1de;--ac:#c4504d}
+.grid .card:nth-child(6n+4){--bg:#dfe2ee;--ac:#2f3f70}
+.grid .card:nth-child(6n+5){--bg:#e7e5e2;--ac:#3b3b3b}
+.grid .card:nth-child(6n+6){--bg:#fdf2d9;--ac:#e0a632}
+.meta{position:relative;z-index:1;max-width:68%}
+.meta h3{font-weight:500;font-size:19px;line-height:1.45;color:#3a3b46}
+.meta p{color:#8a8a94;font-size:13.5px;margin-top:4px;font-weight:300}
+.arrow{display:none}
+.card .ico{position:absolute;left:-8px;bottom:-14px;width:118px;height:118px;display:grid;place-items:center;color:var(--ac);opacity:.95;transition:transform .4s}
+.card:hover .ico{transform:rotate(-6deg) scale(1.05)}
+.card .ico svg{width:100%;height:100%;stroke-width:1.15}
+.card .ico .glyph{font-size:92px;font-weight:600;line-height:1}
+.card .ico .glyph.en{font-family:Georgia,serif;font-size:70px;font-style:italic}
+.num{position:absolute;left:14px;bottom:-26px;font-size:118px;font-weight:700;line-height:1;color:transparent;-webkit-text-stroke:2px var(--ac);font-family:"Readex Pro",sans-serif;transition:transform .4s}
+.card:hover .num{transform:translateY(-6px)}
+.grid.grades .card{min-height:140px}
+.grid.grades .meta{max-width:none}
+.grid.grades .meta h3{white-space:nowrap}
+.grid.two{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.track{min-height:170px}
+.track h3{font-size:22px}
+
+/* أقسام المادة: قائمة مرقّمة */
+.grid.sections{grid-template-columns:1fr;gap:10px;counter-reset:s}
+.card.section{--bg:#fff!important;flex-direction:row;align-items:center;gap:18px;min-height:0;padding:16px 20px;border:1px solid #f0ece6;border-radius:18px}
+.card.section::before{counter-increment:s;content:"0" counter(s);font-size:40px;font-weight:600;color:var(--tealPale);line-height:1;min-width:56px;transition:color .3s}
+.card.section:hover{box-shadow:0 14px 28px -20px rgba(23,169,154,.6);border-color:var(--tealPale)}
+.card.section:hover::before{color:var(--teal)}
+.card.section .ico{display:none}
+.card.section .meta{max-width:none}
+.card.section .meta h3{font-size:16.5px}
+.card.section .arrow{display:block;margin-inline-start:auto;color:var(--teal)}
+.card.section .arrow svg{width:20px;height:20px}
+
+/* بطاقة مميزة */
+.featured{display:flex;align-items:center;gap:16px;text-decoration:none;color:#fff;margin:0 0 22px;padding:20px 22px;border-radius:22px;position:relative;overflow:hidden;
+  background:linear-gradient(120deg,#1bb3a3,#12988b);box-shadow:0 18px 34px -22px rgba(15,143,131,.9);transition:transform .3s;opacity:0;animation:rise .5s forwards}
+.featured::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.09);left:-60px;top:-90px}
+.featured:hover{transform:translateY(-3px)}
+.f-ico{flex:none;width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:#fff;color:var(--teal)}
+.f-ico svg{width:26px;height:26px}
+.featured .meta{max-width:none}
+.featured .meta h3{color:#fff;font-size:20px}
+.featured .meta p{color:rgba(255,255,255,.82)}
+.featured .arrow{display:block;margin-inline-start:auto;color:#fff;position:relative;z-index:1}
+.featured .arrow svg{width:22px;height:22px}
+.featured.ask{margin:26px 0 0}
+
+.subject-head{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+.subject-head .section-sub{margin-bottom:0}
+.ico.big{flex:none;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;background:var(--tealSoft);color:var(--teal)}
+.ico.big svg{width:30px;height:30px}
+.ico.big .glyph{font-size:28px;font-weight:600}
+.ico.big .glyph.en{font-family:Georgia,serif;font-size:22px}
+
+.sched-frame{display:block;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#fff;box-shadow:0 18px 36px -26px rgba(30,60,60,.45);opacity:0;animation:rise .5s forwards}
+.sched-frame img{display:block;width:100%;height:auto}
+.doc-pages{display:grid;gap:18px}
+.sched-actions{display:flex;justify-content:center;margin-top:18px}
+.sched-actions .back{text-decoration:none}
+.dl-btn{font-family:inherit;font-size:15.5px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:10px;padding:12px 24px;border-radius:999px;border:0;color:#fff;text-decoration:none;
+  background:var(--teal);box-shadow:0 12px 24px -14px rgba(15,143,131,.9);transition:transform .2s,background .2s}
+.dl-btn:hover{transform:translateY(-2px);background:var(--teal2)}
+.dl-btn svg{width:20px;height:20px}
+.dl-btn[disabled]{opacity:.6;cursor:wait}
+.dl-btn.off{filter:grayscale(.5);opacity:.6}
+
+/* نموذج اسألي معلمتك */
+.ask-form{display:grid;gap:16px;max-width:760px}
+.ask-form label{display:grid;gap:7px;font-weight:500;font-size:14.5px;color:var(--ink)}
+.ask-form .opt{font-weight:300;color:var(--muted);font-size:13px}
+.ask-form input,.ask-form select,.ask-form textarea{font-family:inherit;font-size:15.5px;color:var(--ink);background:#fff;border:1px solid #ece8e1;border-radius:14px;padding:12px 14px;outline:none;transition:.2s;width:100%}
+.ask-form textarea{resize:vertical;line-height:1.7}
+.ask-form select:disabled{opacity:.55}
+.ask-form input:focus,.ask-form select:focus,.ask-form textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(23,169,154,.12)}
+.row3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.ask-actions{display:flex;justify-content:flex-start}
+.ask-note{margin-top:-8px;font-size:13px;color:var(--muted)}
+#aEmail{text-align:left}
+.ask-err{color:#b2412f;background:#fdebe6;border-radius:12px;padding:10px 14px;font-size:14px}
+.ask-after{background:var(--tealSoft);border-radius:16px;padding:16px 18px;display:grid;gap:8px;font-size:14.5px;line-height:1.7}
+.ask-after .mail{direction:ltr;unicode-bidi:embed;font-weight:600;color:var(--teal2);word-break:break-all}
+.ask-after .back{justify-self:start}
+
+.foot{color:var(--muted);font-size:12.5px;text-align:center;margin-top:34px;font-weight:300}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,30px);opacity:0;pointer-events:none;background:var(--ink);color:#fff;padding:12px 22px;border-radius:14px;font-size:14.5px;box-shadow:0 12px 30px rgba(0,0,0,.25);transition:.35s;z-index:10;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+@media (max-width:1100px){
+  .shell{grid-template-columns:116px minmax(0,1fr)}
+  .aside{grid-column:2;border-inline-start:0;border-top:1px solid #f3f0eb;display:grid;grid-template-columns:1fr 1fr;gap:10px 30px}
+  .aside h2{margin-top:0}
+}
+@media (max-width:700px){
+  .hello-logo{display:block;width:150px;height:auto;margin:0 auto 18px;border-radius:20px;border:1px solid var(--line);background:#fff;padding:6px;box-shadow:0 14px 30px -20px rgba(29,46,72,.5)}
+  .hello{text-align:center}
+  .logo-h .word{font-size:72px}
+  .aside .profile{display:none}
+  body::before{width:300px;height:300px;top:-160px;left:-140px}
+  .shell{grid-template-columns:1fr;margin:0;border-radius:0;min-height:100vh}
+  .side{flex-direction:row;padding:12px 14px;gap:4px;border:0;border-bottom:1px solid #f3f0eb;position:sticky;top:0;z-index:5}
+  .brand{flex-direction:row;align-items:center;gap:4px;margin:0 0 0 8px;padding:0;position:relative}
+  .brand .word{font-size:32px;margin:0}
+  .brand .cap{width:22px;position:absolute;top:-6px;left:50%;transform:translateX(-50%);display:none}
+  .brand .swash,.brand .en{display:none}
+  .brand .pre{font-size:20px;margin:0 0 0 8px}
+  .nav{flex-direction:row;flex:1;gap:0}
+  .nav a{flex-direction:row;padding:10px 10px;font-size:13.5px;gap:6px;white-space:nowrap}
+  .nav a.on::after{inset-inline:12px;top:auto;bottom:2px;width:auto;height:3px}
+  .help{width:38px;height:38px}
+  .panel{padding:26px 16px 22px}
+  .aside{grid-column:1;display:block;padding:26px 18px}
+  .aside h2{margin-top:28px}
+  .grid{grid-template-columns:1fr 1fr;gap:12px}
+  .grid.subjects,.grid.two{grid-template-columns:1fr}
+  .card{min-height:126px;padding:18px}
+  .meta h3{font-size:16.5px}
+  .num{font-size:92px;bottom:-20px;left:8px}
+  .card .ico{width:96px;height:96px}
+  .grid.grades .meta h3{font-size:16px}
+  .card.section{padding:14px 14px;gap:12px}
+  .card.section::before{font-size:32px;min-width:44px}
+  .card.section .meta h3{font-size:15px}
+  .featured{padding:16px;gap:12px}
+  .f-ico{width:48px;height:48px}
+  .featured .meta h3{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.card,.featured,.sched-frame{opacity:1}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="side">
+    <a class="brand" id="home" href="#" title="الرئيسية" aria-label="منصة متمكن — الرئيسية">
+      <svg class="cap" viewBox="0 0 84 40" aria-hidden="true"><path d="M8 30 L42 14 L76 30" fill="none" stroke="#17a99a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="42" cy="8" r="5.5" fill="#17a99a"/></svg>
+      <span class="word">متمكن</span>
+      <svg class="swash" viewBox="0 0 360 34" aria-hidden="true"><path d="M10 10 C 110 36, 250 36, 350 6" fill="none" stroke="#17a99a" stroke-width="7" stroke-linecap="round"/></svg>
+      <span class="en" dir="ltr">MUTAMAKKIN</span>
+    </a>
+    <nav class="nav">
+      <a href="#" id="navHome" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H10l2 2h6.5A2.5 2.5 0 0 1 21 9.5v8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/></svg><span>الصفوف</span></a>
+      <a href="#ask" id="navAsk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A2.5 2.5 0 0 1 4 13.5z"/></svg><span>اسألي معلمتك</span></a>
+    </nav>
+    <a class="help" href="#ask" title="اسألي معلمتك"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.2 9a2.8 2.8 0 1 1 3.9 2.6c-.7.3-1.1.9-1.1 1.6v.4"/><circle cx="12" cy="17" r=".8" fill="currentColor"/></svg></a>
+  </aside>
+
+  <section class="panel">
+    <div class="hello">
+      <img class="hello-logo" src="assets/logo-full.png" alt="شعار مدرسة الرؤية">
+      <h1 id="homeTitle" class="logo-h" aria-label="منصة متمكن">
+        <svg class="cap" viewBox="0 0 84 40" aria-hidden="true"><path d="M8 30 L42 14 L76 30" fill="none" stroke="#17a99a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="42" cy="8" r="5" fill="#17a99a"/></svg>
+        <span class="word" aria-hidden="true">متمكن</span>
+        <svg class="swash" viewBox="0 0 360 34" aria-hidden="true"><path d="M10 10 C 110 36, 250 36, 350 6" fill="none" stroke="#17a99a" stroke-width="5" stroke-linecap="round"/></svg>
+        <span class="en" dir="ltr" aria-hidden="true">MUTAMAKKIN</span>
+      </h1>
+      <p class="tag">الحقيبة التعليمية استعداداً لاختبارات نهاية الفصل الدراسي الأول لمواد الصفوف من الخامس إلى الثاني عشر</p>
+    </div>
+    <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input id="q" type="search" placeholder="ابحثي…" autocomplete="off"></label>
+
+    <div class="bar" id="bar" hidden>
+      <div class="crumbs" id="crumbs"></div>
+      <button class="back" id="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>رجوع</button>
+    </div>
+    <main id="view"></main>
+    <p class="no-res" id="noRes" hidden>لا توجد نتائج مطابقة</p>
+    <p class="foot">منصة متمكن · مدرسة الرؤية الحلقة الثانية و الثالثة - بنات</p>
+  </section>
+
+  <aside class="aside">
+    <div>
+      <div class="profile">
+        <img src="assets/logo-full.png" alt="شعار مدرسة الرؤية">
+        <div><b>مدرسة الرؤية</b><span>الحلقة الثانية و الثالثة - بنات</span>
+          <div class="prog"><i></i></div><div class="prog-l">الفصل الدراسي الأول</div></div>
+      </div>
+    </div>
+    <div>
+      <h2>دليل الاستخدام</h2>
+      <p class="sub">خطوات سريعة للوصول لموادك</p>
+      <ol class="toc">
+        <li><span class="n">01</span><div><b>اختاري صفك</b><span>من الخامس إلى الثاني عشر</span></div></li>
+        <li><span class="n">02</span><div><b>حددي المسار</b><span>العام أو المتقدم</span></div></li>
+        <li><span class="n">03</span><div><b>جدول الاختبارات</b><span>في أعلى صفحة الصف</span></div></li>
+        <li><span class="n">04</span><div><b>اختاري المادة</b><span>هيكل الاختبار والمصادر</span></div></li>
+        <li><span class="n">05</span><div><b>اسألي معلمتك</b><span>لأي استفسار عن المادة</span></div></li>
+      </ol>
+      <a class="ask-mini" href="#ask"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A2.5 2.5 0 0 1 4 13.5z"/></svg>اسألي معلمتك</a>
+    </div>
+  </aside>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const GRADES = [
+  {n:5,  name:"الخامس",       d:"5"},
+  {n:6,  name:"السادس",       d:"6"},
+  {n:7,  name:"السابع",       d:"7"},
+  {n:8,  name:"الثامن",       d:"8"},
+  {n:9,  name:"التاسع",       d:"9",  tracks:true},
+  {n:10, name:"العاشر",       d:"10", tracks:true},
+  {n:11, name:"الحادي عشر",   d:"11", tracks:true},
+  {n:12, name:"الثاني عشر",   d:"12", tracks:true}
+];
+const TRACKS = {general:"العام", advanced:"المتقدم", scientific:"العام - الميول العلمية"};
+
+const I = (p)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const SUBJECTS = {
+  islamic:  {name:"التربية الإسلامية",   icon:I('<path d="M15.5 3.5a8.5 8.5 0 1 0 5 15.4A7 7 0 1 1 15.5 3.5z"/><path d="M17.5 8l.7 1.6 1.8.2-1.3 1.2.4 1.8-1.6-.9-1.6.9.4-1.8-1.3-1.2 1.8-.2z"/>')},
+  arabic:   {name:"اللغة العربية",       icon:'<span class="glyph">ض</span>'},
+  english:  {name:"اللغة الإنجليزية",    icon:'<span class="glyph en">Aa</span>'},
+  social:   {name:"الدراسات الاجتماعية", icon:I('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/>')},
+  math:     {name:"الرياضيات",           icon:I('<path d="M5 6h6M8 3v6M14 6h5M5 16l5 5M10 16l-5 5M14 15h5M14 19h5"/>')},
+  science:  {name:"العلوم",              icon:I('<path d="M9 3h6M10 3v6L4.5 18.5A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.5-2.5L14 9V3"/><path d="M7 15h10"/>')},
+  physics:  {name:"الفيزياء",            icon:I('<circle cx="12" cy="12" r="1.6" fill="currentColor"/><ellipse cx="12" cy="12" rx="9.5" ry="3.8"/><ellipse cx="12" cy="12" rx="9.5" ry="3.8" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.5" ry="3.8" transform="rotate(120 12 12)"/>')},
+  chemistry:{name:"الكيمياء",            icon:I('<path d="M8 3h8M9 3v5.5L5 17a2.5 2.5 0 0 0 2.3 4h9.4A2.5 2.5 0 0 0 19 17l-4-8.5V3"/><circle cx="10" cy="15" r="1"/><circle cx="14" cy="17.5" r=".8"/><circle cx="13" cy="13" r=".6"/>')},
+  biology:  {name:"الأحياء",             icon:I('<path d="M7 3c0 5 10 5 10 9s-10 4-10 9M17 3c0 5-10 5-10 9s10 4 10 9"/><path d="M8.5 6h7M8.5 18h7M10 9.5h4M10 14.5h4"/>')}
+};
+
+const SECTIONS = {
+  structure:  {name:"هيكل الاختبار", icon:I('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h3M13 11h3M8 15h3M13 15h3M8 18h8"/>')},
+  interactive:{name:"تدريبات وأنشطة تفاعلية", icon:I('<path d="M9 11.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M12 10.5a1.5 1.5 0 0 1 3 0v1"/><path d="M15 11a1.5 1.5 0 0 1 3 0v3.5A6.5 6.5 0 0 1 11.5 21h-.6a5 5 0 0 1-3.9-1.9L4.6 16a1.6 1.6 0 0 1 2.4-2.1L9 15.5"/>')},
+  lessons:    {name:"حصص مسجلة و عروض تقديمية للدروس", icon:I('<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M10 8.2v5.6l4.6-2.8z"/><path d="M8 21h8M12 17v4"/>')},
+  remedial:   {name:"مصادر علاجية وإثرائية", icon:I('<path d="M12 21s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 8a4.3 4.3 0 0 1 7.5 2.8C19.5 16.4 12 21 12 21z"/><path d="M12 11v5M9.5 13.5h5"/>')},
+  materials:  {name:"مواد تعليمية مذكرات وأوراق عمل وتدريبات", icon:I('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>')},
+  assessments:{name:"نماذج هياكل دروس و اختبارات و تقييمات قصيرة و مراجعات", icon:I('<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M8.5 10.5l1.5 1.5 3-3M8.5 16l1.5 1.5 3-3"/>')}
+};
+
+const DLI = I('<path d="M12 4v11M7 10.5l5 5 5-5"/><path d="M5 19.5h14"/>');
+const ASKI = I('<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A2.5 2.5 0 0 1 4 13.5z"/><path d="M9.8 8a2.2 2.2 0 1 1 3 2.05c-.5.2-.8.6-.8 1.1v.35"/><circle cx="12" cy="13.6" r=".6" fill="currentColor"/>');
+const CAL = I('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M7.5 14h2M11 14h2M14.5 14h2M7.5 17.5h2M11 17.5h2"/>');
+const ARROW = `<span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></span>`;
+const $ = s=>document.querySelector(s);
+const view=$("#view"), bar=$("#bar"), crumbs=$("#crumbs");
+const delay=i=>`style="animation-delay:${i*55}ms"`;
+
+function parse(h){
+  const m=(h||"").match(/^grade-(\d+)(?:-(general|advanced|scientific))?(?:-([a-z]+))?(?:-([a-z]+))?$/);
+  if(!m) return {};
+  const g=GRADES.find(x=>x.n==+m[1]); if(!g) return {};
+  return {g, t:m[2], sub:m[3], sec:m[4]};
+}
+
+function renderHome(){
+  bar.hidden=true;
+  view.innerHTML=`
+    <h2 class="section-title" style="margin-bottom:26px">اختر الصف الدراسي</h2>
+    <div class="grid grades">${GRADES.map((g,i)=>`
+      <a class="card" href="#grade-${g.n}" ${delay(i)}>
+        <span class="num">${g.d}</span>
+        <span class="meta"><h3>الصف ${g.name}</h3></span>${ARROW}
+      </a>`).join("")}
+    </div>
+    <a class="featured ask" href="#ask">
+      <span class="f-ico">${ASKI}</span>
+      <span class="meta"><h3>اسألي معلمتك</h3><p>في حال وجود استفسارات أو أسئلة، أرسليها وستجيب عليها معلمتك</p></span>${ARROW}
+    </a>`;
+}
+
+function renderTracks(g){
+  setBar([`الصف ${g.name}`], "");
+  view.innerHTML=`
+    <h2 class="section-title">الصف ${g.name}</h2>
+    <p class="section-sub">اختر المسار</p>
+    <div class="grid two${LINKS[`grade-${g.n}-scientific`]?" three":""}">${Object.entries(TRACKS).filter(([k])=>LINKS[`grade-${g.n}-${k}`]).map(([k,v],i)=>{
+      const n=Object.keys(LINKS[`grade-${g.n}-${k}`]).length;
+      return `<a class="card track" href="#grade-${g.n}-${k}" ${delay(i)}>
+        <span class="ico">${g.n===12
+          ? I('<path d="M3 8l9-4 9 4-9 4-9-4z"/><path d="M7 10v5c0 1.5 2.2 3 5 3s5-1.5 5-3v-5"/>')
+          : I('<path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5z"/><path d="M12 6.5v13"/>')}</span>
+        <span class="meta"><h3>${v}</h3></span>
+      </a>`}).join("")}
+    </div>`;
+}
+
+function renderSubjects(g,t){
+  const key=t?`grade-${g.n}-${t}`:`grade-${g.n}`;
+  const list=LINKS[key];
+  const title=`الصف ${g.name}${t?" "+TRACKS[t]:""}`;
+  setBar(t?[`الصف ${g.name}`,TRACKS[t]]:[`الصف ${g.name}`], t?`grade-${g.n}`:"");
+  view.innerHTML=`
+    <h2 class="section-title">${title}</h2>
+    <div style="height:18px"></div>
+    <a class="featured" href="#${key}-schedule">
+      <span class="f-ico">${CAL}</span>
+      <span class="meta"><h3>جدول الاختبارات</h3><p>مواعيد اختبارات نهاية الفصل الدراسي الأول</p></span>${ARROW}
+    </a>
+    <p class="section-sub" style="margin-top:6px">اختر المادة</p>
+    <div class="grid subjects">${Object.keys(list).map((s,i)=>{
+      const S=SUBJECTS[s];
+      return `<a class="card" href="#${key}-${s}" ${delay(i)}>
+        <span class="ico">${S.icon}</span>
+        <span class="meta"><h3>${S.name}</h3></span>${ARROW}
+      </a>`}).join("")}
+    </div>`;
+}
+
+function renderSections(g,t,sub){
+  const key=t?`grade-${g.n}-${t}`:`grade-${g.n}`;
+  const links=LINKS[key][sub], S=SUBJECTS[sub];
+  const parts=[`الصف ${g.name}`]; if(t) parts.push(TRACKS[t]); parts.push(S.name);
+  setBar(parts,key);
+  const link=k=>{
+    const v=links[k], isDoc=Array.isArray(v)&&v.length, url=isDoc?"":String(v||"").trim(), ok=isDoc||!!url;
+    return {attrs:isDoc?`href="#${key}-${sub}-${k}"`:ok?`href="${url}" target="_blank" rel="noopener"`:`href="#${key}-${sub}" data-soon="1"`,
+            label:isDoc?"عرض الملف":ok?"فتح المجلد":"سيتوفر قريباً"};
+  };
+  view.innerHTML=`
+    <div class="subject-head"><span class="ico big">${S.icon}</span>
+      <div><h2 class="section-title">${S.name}</h2><p class="section-sub">الصف ${g.name}${t?" "+TRACKS[t]:""}</p></div></div>
+    ${(()=>{const L=link("structure");return `<a class="featured" ${L.attrs}>
+      <span class="f-ico">${SECTIONS.structure.icon}</span>
+      <span class="meta"><h3>هيكل الاختبار</h3><p>${L.label}</p></span>${ARROW}
+    </a>`})()}
+    <div class="grid sections">${Object.entries(SECTIONS).filter(([k])=>k!=="structure").map(([k,sec],i)=>{
+      const L=link(k);
+      return `<a class="card section" ${L.attrs} ${delay(i)}>
+        <span class="ico">${sec.icon}</span>
+        <span class="meta"><h3>${sec.name}</h3><p>${L.label}</p></span>${ARROW}
+      </a>`}).join("")}
+    </div>`;
+}
+
+function renderSchedule(g,t){
+  const key=t?`grade-${g.n}-${t}`:`grade-${g.n}`, src=SCHEDULE[key];
+  const parts=[`الصف ${g.name}`]; if(t) parts.push(TRACKS[t]); parts.push("جدول الاختبارات");
+  setBar(parts,key);
+  view.innerHTML=`
+    <div class="subject-head"><span class="ico big">${CAL}</span>
+      <div><h2 class="section-title">جدول الاختبارات</h2><p class="section-sub">الصف ${g.name}${t?" "+TRACKS[t]:""} · نهاية الفصل الدراسي الأول</p></div></div>
+    <a class="sched-frame" href="${src}" target="_blank" rel="noopener"><img src="${src}" alt="جدول اختبارات الصف ${g.name}${t?" "+TRACKS[t]:""}"></a>
+    <div class="sched-actions"><a class="back" href="${src}" target="_blank" rel="noopener">فتح الجدول بالحجم الكامل</a></div>`;
+}
+
+function renderDoc(g,t,sub,k){
+  const key=t?`grade-${g.n}-${t}`:`grade-${g.n}`, pages=LINKS[key][sub][k], S=SUBJECTS[sub], sec=SECTIONS[k];
+  const parts=[`الصف ${g.name}`]; if(t) parts.push(TRACKS[t]); parts.push(S.name, sec.name);
+  setBar(parts,`${key}-${sub}`);
+  view.innerHTML=`
+    <div class="subject-head"><span class="ico big">${sec.icon}</span>
+      <div><h2 class="section-title">${sec.name}</h2><p class="section-sub">${S.name} · الصف ${g.name}${t?" "+TRACKS[t]:""}</p></div></div>
+    <div class="sched-actions" style="margin:0 0 20px"><button class="dl-btn" id="dl" data-src="${pages[0].replace(/-\d+\.jpg$/,".pdf")}" data-name="${sec.name} - ${S.name} - الصف ${g.name}${t?" "+TRACKS[t]:""}.pdf">${DLI}<span>تنزيل الملف</span></button></div>
+    <div class="doc-pages">${pages.map((src,i)=>`
+      <a class="sched-frame" href="${src}" target="_blank" rel="noopener" ${delay(i)}><img src="${src}" alt="${sec.name} – صفحة ${i+1}" loading="${i?"lazy":"eager"}"></a>`).join("")}
+    </div>
+    <p class="section-sub" style="margin-top:14px">اضغط على أي صفحة لفتحها بالحجم الكامل</p>`;
+}
+
+function renderAsk(){
+  setBar(["اسألي معلمتك"],"");
+  view.innerHTML=`
+    <div class="subject-head"><span class="ico big">${ASKI}</span>
+      <div><h2 class="section-title">اسألي معلمتك</h2><p class="section-sub">في حال وجود استفسارات أو أسئلة حول المادة، أرسليها هنا وستجيب عليها معلمتك</p></div></div>
+    <form class="ask-form" id="askForm" novalidate>
+        <label>اسم الطالبة<input id="aName" type="text" autocomplete="name" placeholder="الاسم الثلاثي"></label>
+      <label>البريد المدرسي للطالبة<input id="aEmail" type="email" dir="ltr" inputmode="email" autocomplete="email" placeholder="name@moe.sch.ae"></label>
+      <p class="ask-note">سيصلك رد المعلمة على بريدك الإلكتروني — يفضّل إرسال السؤال من بريدك المدرسي.</p>
+      <div class="row3">
+        <label>الصف<select id="aGrade"><option value="">اختاري الصف</option>${GRADES.map(g=>`<option value="${g.n}">الصف ${g.name}</option>`).join("")}</select></label>
+        <label id="aTrackL" hidden>المسار<select id="aTrack"><option value="">اختاري المسار</option></select></label>
+        <label>المادة<select id="aSub" disabled><option value="">اختاري المادة</option></select></label>
+        <label>المعلمة<select id="aTeacher" disabled><option value="">اختاري المعلمة</option></select></label>
+      </div>
+      <label>السؤال<textarea id="aQ" rows="6" placeholder="اكتبي سؤالك بوضوح، ويمكنك ذكر رقم الدرس أو الصفحة"></textarea></label>
+      <p class="ask-err" id="aErr" hidden></p>
+      <div class="ask-actions">
+        <a class="dl-btn" id="aSend" href="#ask">${I('<path d="M4 12 20 4l-6 16-3-7z"/><path d="M11 13l9-9"/>')}<span>إرسال السؤال</span></a>
+      </div>
+      <div class="ask-after" id="aAfter" hidden>
+        <p><b>سيفتح تطبيق البريد ورسالتك جاهزة — اضغطي «إرسال» من هناك.</b></p>
+        <p>إذا لم يفتح البريد، انسخي السؤال وأرسليه من بريدك المدرسي إلى: <span class="mail" id="aMail"></span></p>
+        <button type="button" class="back" id="aCopy">نسخ السؤال والبريد</button>
+      </div>
+    </form>`;
+  const $g=$("#aGrade"),$tr=$("#aTrack"),$s=$("#aSub"),$t=$("#aTeacher");
+  const fillSubs=()=>{
+    const G=GRADES.find(x=>x.n==$g.value), subs=TEACHERS[$g.value]||{};
+    const ready=G && (!G.tracks || $tr.value);
+    const allowed=ready ? Object.keys(LINKS[G.tracks?`grade-${G.n}-${$tr.value}`:`grade-${G.n}`]||{}) : [];
+    $s.innerHTML=`<option value="">اختاري المادة</option>`+allowed.filter(k=>subs[k]).map(k=>`<option value="${k}">${SUBJECTS[k].name}</option>`).join("");
+    $s.disabled=!ready; $t.innerHTML=`<option value="">اختاري المعلمة</option>`; $t.disabled=true; upd();
+  };
+  $g.onchange=()=>{
+    const G=GRADES.find(x=>x.n==$g.value);
+    $("#aTrackL").hidden=!(G&&G.tracks);
+    $tr.innerHTML=`<option value="">اختاري المسار</option>`+(G&&G.tracks?Object.entries(TRACKS).filter(([k])=>LINKS[`grade-${G.n}-${k}`]).map(([k,v])=>`<option value="${k}">${v}</option>`).join(""):"");
+    fillSubs();
+  };
+  $tr.onchange=fillSubs;
+  $s.onchange=()=>{
+    const list=(TEACHERS[$g.value]||{})[$s.value]||[];
+    $t.innerHTML=(list.length>1?`<option value="">اختاري المعلمة</option>`:"")+list.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join("");
+    $t.disabled=!list.length; upd();
+  };
+  ["aName","aEmail","aQ"].forEach(id=>$("#"+id).addEventListener("input",upd)); $t.onchange=upd;
+  upd();
+}
+function askData(){
+  const g=$("#aGrade").value,s=$("#aSub").value,ti=$("#aTeacher").value;
+  const t=((TEACHERS[g]||{})[s]||[])[ti];
+  const G=GRADES.find(x=>x.n==g), tr=G&&G.tracks?$("#aTrack").value:"";
+  return {name:$("#aName").value.trim(),email:$("#aEmail").value.trim(),q:$("#aQ").value.trim(),g:G,tr,trName:tr?TRACKS[tr]:"",needTr:!!(G&&G.tracks),s:SUBJECTS[s],t};
+}
+function askMail(d){
+  const gl=`الصف ${d.g.name}${d.trName?" "+d.trName:""}`;
+  const subject=`سؤال من منصة متمكن – ${d.s.name} – ${gl}`;
+  const body=`الأستاذة ${d.t[0]} المحترمة،\n\n${d.q}\n\n—\nالطالبة: ${d.name}\nالبريد المدرسي: ${d.email}\nالصف: ${d.g.name}${d.trName?"\nالمسار: "+d.trName:""}\nالمادة: ${d.s.name}\n(أُرسل عبر منصة متمكن)`;
+  return {subject,body,href:`mailto:${d.t[1]}?cc=${encodeURIComponent(d.email)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`};
+}
+function upd(){
+  const d=askData(), btn=$("#aSend"); if(!btn) return;
+  const ok=d.name&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)&&d.q&&d.g&&d.s&&d.t&&(!d.needTr||d.tr);
+  if(ok) $("#aErr").hidden=true;
+  btn.classList.toggle("off",!ok);
+  btn.setAttribute("href", ok?askMail(d).href:"#ask");
+}
+
+let backTo="";
+function setBar(parts,back){
+  bar.hidden=false; backTo=back;
+  crumbs.innerHTML=`<a href="#" style="color:inherit;text-decoration:none">الرئيسية</a>`+
+    parts.map((p,i)=>`<span class="sep">‹</span>${i===parts.length-1?`<b>${p}</b>`:p}`).join("");
+}
+
+function route(){
+  const {g,t,sub,sec}=parse(location.hash.slice(1));
+  const key=g&&(t?`grade-${g.n}-${t}`:`grade-${g.n}`);
+  if(location.hash==='#ask') renderAsk();
+  else if(!g || (!g.tracks && t)) renderHome();
+  else if(g.tracks && !t) renderTracks(g);
+  else if(sub==='schedule' && SCHEDULE[key]) renderSchedule(g,t);
+  else if(sub && sec && LINKS[key] && LINKS[key][sub] && Array.isArray(LINKS[key][sub][sec])) renderDoc(g,t,sub,sec);
+  else if(sub && LINKS[key] && LINKS[key][sub]) renderSections(g,t,sub);
+  else renderSubjects(g,t);
+  $("#navHome").classList.toggle("on",location.hash!=="#ask");
+  $(".hello-logo").hidden=location.hash.length>1;
+  $("#navAsk").classList.toggle("on",location.hash==="#ask");
+  const qi=$("#q"); qi.value=""; $("#noRes").hidden=true;
+  qi.parentElement.hidden=location.hash==="#ask"||!!view.querySelector(".doc-pages,.sched-frame");
+  const top=location.hash.length>1 ? Math.max(0,($("#bar").hidden?view:$("#bar")).getBoundingClientRect().top+scrollY-80) : 0;
+  if(route.ran) window.scrollTo({top,behavior:"smooth"}); route.ran=true;
+}
+
+let tt;
+function toast(msg){const el=$("#toast");el.textContent=msg;el.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>el.classList.remove("show"),2200)}
+
+let DLNS; (async()=>{try{DLNS=await window.claude?.use?.("downloads")}catch(e){DLNS=null}})();
+async function downloadFile(btn){
+  const src=btn.dataset.src, name=btn.dataset.name;
+  if(!DLNS){ window.open(src,"_blank","noopener") || (location.href=src); return; }
+  btn.disabled=true;
+  try{
+    const blob=await (await fetch(src)).blob();
+    await DLNS.save({filename:name,data:blob});
+    toast("تم تنزيل الملف");
+  }catch(err){
+    const c=err&&err.code;
+    if(c==="declined"){} else if(c==="rate_limited") toast("انتظر لحظة ثم حاول مرة أخرى");
+    else { const a=document.createElement("a"); a.href=src; a.target="_blank"; a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove(); }
+  }finally{btn.disabled=false}
+}
+
+view.addEventListener("click",e=>{
+  if(e.target.closest("#aSend")){
+    const d=askData(), err=$("#aErr");
+    const miss=[!d.name&&"اسم الطالبة",!d.email&&"البريد المدرسي",d.email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)&&"بريد صحيح",!d.g&&"الصف",d.needTr&&!d.tr&&"المسار",!d.s&&"المادة",!d.t&&"المعلمة",!d.q&&"السؤال"].filter(Boolean);
+    if(miss.length){e.preventDefault();err.textContent="أكملي: "+miss.join("، ");err.hidden=false;return;}
+    err.hidden=true; $("#aMail").textContent=d.t[1]; $("#aAfter").hidden=false; return;
+  }
+  if(e.target.closest("#aCopy")){
+    const d=askData(),m=askMail(d),txt=`إلى: ${d.t[1]}\nالموضوع: ${m.subject}\n\n${m.body}`;
+    navigator.clipboard.writeText(txt).then(()=>toast("تم النسخ")).catch(()=>toast("تعذّر النسخ — انسخي يدوياً"));
+    return;
+  }
+  const d=e.target.closest(".dl-btn"); if(d){e.preventDefault();downloadFile(d);return;}
+  const a=e.target.closest("[data-soon]");
+  if(a){e.preventDefault();toast("محتوى هذا القسم سيتوفر قريباً")}
+});
+$("#back").onclick=()=>{location.hash=backTo; if(!backTo) route();};
+$("#home").onclick=$("#homeTitle").onclick=()=>{location.hash=""; route();};
+$("#q").addEventListener("input",e=>{
+  const v=e.target.value.trim().replace(/[إأآ]/g,"ا").replace(/ة/g,"ه");
+  let shown=0;
+  view.querySelectorAll(".card").forEach(c=>{
+    const t=c.textContent.replace(/[إأآ]/g,"ا").replace(/ة/g,"ه");
+    const ok=!v||t.includes(v); c.style.display=ok?"":"none"; if(ok) shown++;
+  });
+  $("#noRes").hidden=!(v&&!shown);
+});
+window.addEventListener("hashchange",route);
+route();
+</script>
+</body>
+</html>
